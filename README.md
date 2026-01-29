@@ -374,7 +374,7 @@ public:
 ### 同步状态机
 
 ```mermaid
-stateDiagram-v2
+stateDiagram
   [*] --> IDLE
   IDLE --> SYNCING: 预检 needSync=true
   SYNCING --> COMPLETED: 最后一批 ACK 成功
