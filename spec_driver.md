@@ -4,6 +4,7 @@
 
 涉及项目：
 •    [Spec Kit](https://github.com/github/spec-kit)
+
 •    [OpenSpec](https://github.com/Fission-AI/OpenSpec)
 
 ⸻
