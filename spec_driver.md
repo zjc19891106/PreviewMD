@@ -59,34 +59,23 @@ Spec-Driven Development 的核心理念：
 
 ## 四、AI Agent 如何与规范互动
 
-Spec Kit 流程
 
-1. 读取 constitution
-2. 生成 spec
-3. 基于 spec 生成 plan
-4. 基于 plan 拆 tasks
-5. 只允许根据 tasks 实现
+| 阶段 | Spec Kit 流程         | OpenSpec 流程                        |
+| ---- | --------------------- | ------------------------------------ |
+| 1    | 读取 constitution     | 创建 change（变更提案）              |
+| 2    | 生成 spec             | 写 proposal → design → specs delta |
+| 3    | 基于 spec 生成 plan   | validate 规范完整性                  |
+| 4    | 基于 plan 拆 tasks    | 按 tasks 执行                        |
+| 5    | 只允许根据 tasks 实现 | verify 检测实现与规范是否漂移        |
+| 6    | —                    | 归档 change，更新系统规格            |
 
-关键规则：
-•    不允许跳过阶段
-•    plan 必须包含 Constitution Check
-•    tasks 必须带 DoD（完成定义）
+### 关键规则对比
 
-⸻
 
-OpenSpec 流程
-
-1. 创建 change（变更提案）
-2. 写 proposal → design → specs delta
-3. validate 规范完整性
-4. 按 tasks 执行
-5. verify 检测实现与规范是否漂移
-6. 归档 change，更新系统规格
-
-关键规则：
-•    实现必须对应 tasks 条目
-•    代码变更必须能映射回 specs
-•    不允许“隐形需求”
+| 方法论   | 关键规则                                                                                      |
+| -------- | --------------------------------------------------------------------------------------------- |
+| Spec Kit | • 不允许跳过阶段<br/>• plan 必须包含 Constitution Check<br/>• tasks 必须带 DoD（完成定义） |
+| OpenSpec | • 实现必须对应 tasks 条目<br/>• 代码变更必须能映射回 specs<br/>• 不允许“隐形需求”        |
 
 ⸻
 
