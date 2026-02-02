@@ -3,6 +3,7 @@
 本文总结两种主流 规范驱动开发（Spec-Driven Development, SDD） 工具体系在 大模型 CLI 工具链 场景下的应用方法论、Prompt 结构方式以及复杂项目中的防误生成与验证机制。
 
 涉及项目：
+
 •    [Spec Kit](https://github.com/github/spec-kit)
 
 •    [OpenSpec](https://github.com/Fission-AI/OpenSpec)
