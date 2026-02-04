@@ -18,6 +18,8 @@
 
 **CodeX Mac App**: 除了 CLI，还有桌面应用，适合产品经理和设计师使用
 
+**扩展支持**: ✅ MCP | ✅ Skills
+
 ### 第三方推荐 - 银河录像局
 
 - **链接**: https://nf.video/wYsab/?gid=105
@@ -61,6 +63,8 @@
 - Gemini 3 Flash
 - Gemini 3 Pro
 - Gemini 3 Preview
+
+**扩展支持**: ✅ MCP | ✅ Skills
 
 ---
 
