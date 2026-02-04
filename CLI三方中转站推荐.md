@@ -54,7 +54,17 @@
 
 ---
 
-## 3. OpenRouter
+## 3. Gemini CLI (Google)
+
+支持 Gemini 3 系列模型：
+
+- Gemini 3 Flash
+- Gemini 3 Pro
+- Gemini 3 Preview
+
+---
+
+## 4. OpenRouter
 
 通用 API 路由服务，支持多种模型接入
 
