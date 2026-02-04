@@ -94,6 +94,8 @@ openspec/
     └── archive/           # 已完成的变更
 ```
 
+![OpenSpec 目录结构示例](contents.png)
+
 ## 三阶段工作流
 
 ```
@@ -106,6 +108,8 @@ openspec/
 │  delta specs     │     │                  │     │                  │
 └──────────────────┘     └──────────────────┘     └──────────────────┘
 ```
+
+![变更流程示例](changes.png)
 
 ---
 
@@ -192,6 +196,8 @@ openspec validate $CHANGE --strict
 ```
 
 ### spec.md（增量规范）模板
+
+![规范文件示例](spec.png)
 
 ```markdown
 ## ADDED Requirements
