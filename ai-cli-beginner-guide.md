@@ -92,8 +92,8 @@ done
 
 | 工具 | 开发商 | 默认模型 | 特点 | 定价 |
 |------|--------|---------|------|------|
-| **Claude Code** | Anthropic | Claude Sonnet/Opus | 最强代码理解，支持 200K 上下文 | API 按量付费 |
-| **Codex CLI** | OpenAI | GPT-4o/o1 | 多模型支持，生态丰富 | API 按量付费 |
+| **Claude Code** | Anthropic | Claude Sonnet/Opus | 最强代码理解，支持 200K 上下文 | API 按量付费，或者月度套餐 |
+| **Codex CLI** | OpenAI | GPT-4o/o1 | 多模型支持，生态丰富 | API 按量付费，或者月度套餐 |
 | **Gemini CLI** | Google | Gemini 2.5 Pro | 免费额度大，支持多模态 | 免费 + API |
 | **OpenCode** | 开源社区 | 多模型 | Go 编写，轻量快速，支持 LSP | 仅 API 费用 |
 | **Aider** | 开源社区 | 多模型 | Git 集成强，支持多文件编辑 | 仅 API 费用 |
@@ -108,6 +108,99 @@ done
 极致轻量 → OpenCode（Go 编写，启动快）
 Git 重度用户 → Aider（Git 集成最强）
 ```
+### LSP?
+
+  LSP 是一种标准化协议，让代码编辑器能够获得智能代码功能（如自动补全、跳转定义、查找引用等），而无需为每种语言单独开发插件。
+
+  工作原理
+
+  ┌─────────────────┐                    ┌─────────────────┐
+  │   编辑器/IDE     │  ◄── LSP 协议 ──►  │   语言服务器     │
+  │  (VS Code等)    │                    │  (分析代码)      │
+  └─────────────────┘                    └─────────────────
+ 对比：
+  - 没有 LSP：AI 只能通过文本分析猜测代码结构
+  - 有 LSP：AI 能获得编译器级别的代码理解
+  
+### 📊 五大 CLI 工具全面横向对比
+
+#### 基础信息对比
+
+| 维度 | Claude Code | Codex CLI | Gemini CLI | OpenCode | Aider |
+|------|-------------|-----------|------------|----------|-------|
+| **开发商** | Anthropic | OpenAI | Google | 开源社区 | 开源社区 |
+| **编写语言** | TypeScript | TypeScript | TypeScript | Go | Python |
+| **默认模型** | Claude Sonnet | GPT-4o | Gemini 2.5 Pro | 多模型 | 多模型 |
+| **上下文窗口** | 200K tokens | 128K tokens | 1M tokens | 取决于模型 | 取决于模型 |
+| **开源** | ❌ | ❌ | ❌ | ✅ | ✅ |
+
+#### 安装与配置
+
+| 维度 | Claude Code | Codex CLI | Gemini CLI | OpenCode | Aider |
+|------|-------------|-----------|------------|----------|-------|
+| **安装方式** | npm | npm | npm/curl | brew/go | pip/brew |
+| **认证方式** | API Key+订阅 | API Key+订阅 | Google 账号/API Key+订阅 | API Key+订阅 | API Key+订阅 |
+| **配置文件** | ~/.claude/ | ~/.codex/ | ~/.gemini/ | ~/.config/opencode/ | ~/.aider.conf.yml |
+| **项目配置** | CLAUDE.md | instructions.md | GEMINI.md | prompts/ | .aider.conf.yml |
+
+#### 功能特性对比
+
+| 功能 | Claude Code | Codex CLI | Gemini CLI | OpenCode | Aider |
+|------|:-----------:|:---------:|:----------:|:--------:|:-----:|
+| **多模型支持** | ⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Git 集成** | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **多文件编辑** | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **代码理解** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **多模态** | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐ |
+| **插件/扩展** | Skills/MCP | ❌ | ❌ | oh-my-opencode | ❌ |
+| **LSP 支持** | ✅ | ❌ | ❌ | ✅ | ❌ |
+| **沙盒模式** | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **语音输入** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Web UI** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **本地模型** | ❌ | ❌ | ❌ | ✅ Ollama | ✅ Ollama |
+
+#### 斜杠命令数量
+
+| 工具 | 命令数量 | 特色命令 |
+|------|:--------:|----------|
+| **Claude Code** | 30+ | `/compact`, `/memory`, `/mcp`, `/skills` |
+| **Codex CLI** | 21 | `/approval`, `/undo`, `/run` |
+| **Gemini CLI** | 20+ | `/sandbox`, `/image`, `/export` |
+| **OpenCode** | 21 | `/provider`, `/tokens`, `/cost` |
+| **Aider** | 27 | `/architect`, `/voice`, `/web`, `/map` |
+
+#### 定价对比
+
+| 工具 | 定价模式 | 免费额度 | 典型费用（每百万 token） |
+|------|----------|----------|------------------------|
+| **Claude Code** | API 按量 | 无 | Sonnet: $3/$15, Opus: $15/$75 |
+| **Codex CLI** | API 按量 | 无 | GPT-4o: $2.5/$10 |
+| **Gemini CLI** | 免费+API | 1500次/天 | Pro: $1.25/$5 |
+| **OpenCode** | 仅 API | 取决于提供商 | 取决于选择的模型 |
+| **Aider** | 仅 API | 取决于提供商 | 取决于选择的模型 |
+
+#### 优缺点速览
+
+| 工具 | 优点 | 缺点 |
+|------|------|------|
+| **Claude Code** | 代码理解最强、200K 上下文、Skills 扩展 | 无免费额度、不支持本地模型 |
+| **Codex CLI** | OpenAI 生态、多模型、稳定 | 功能相对基础、无插件系统 |
+| **Gemini CLI** | 免费额度大、1M 上下文、多模态强 | 国内访问困难、功能较新 |
+| **OpenCode** | 极速启动、多模型、LSP、插件系统 | 社区较小、文档较少 |
+| **Aider** | Git 集成最强、多文件编辑、架构师模式 | Python 依赖、启动稍慢 |
+
+#### 最佳使用场景
+
+| 场景 | 推荐工具 | 原因 |
+|------|----------|------|
+| **企业级开发** | Claude Code | 代码理解强、安全性高 |
+| **新手学习** | Gemini CLI | 免费、上手简单 |
+| **开源项目** | Aider | Git 集成、自动提交 |
+| **多模型实验** | OpenCode | 支持所有主流模型 |
+| **快速原型** | Codex CLI | 稳定、生态丰富 |
+| **大型重构** | Aider | 多文件编辑、架构师模式 |
+| **预算有限** | Gemini CLI + Aider | 免费额度 + 开源 |
+| **本地部署** | OpenCode / Aider | 支持 Ollama |
 
 ---
 
@@ -1977,6 +2070,104 @@ gemini
 # 通用代理设置
 export http_proxy="http://127.0.0.1:7890"
 export https_proxy="http://127.0.0.1:7890"
+```
+
+---
+
+## 🎯 分享版：AI CLI 工具速查表
+
+> 以下是精炼版内容，适合快速分享和参考。
+
+### 一句话选型
+
+```
+💡 新手免费体验 → Gemini CLI
+💼 专业开发首选 → Claude Code
+🔧 多模型玩家 → OpenCode / Aider
+💰 预算有限 → Gemini CLI（免费）+ Aider（开源）
+```
+
+### 30 秒安装
+
+```bash
+# Claude Code
+npm i -g @anthropic-ai/claude-code && export ANTHROPIC_API_KEY="sk-ant-xxx"
+
+# Codex CLI
+npm i -g @openai/codex && export OPENAI_API_KEY="sk-xxx"
+
+# Gemini CLI
+npm i -g @google/gemini-cli && gemini auth login
+
+# OpenCode
+brew install opencode-ai/tap/opencode
+
+# Aider
+pip install aider-chat
+```
+
+### 核心命令速记
+
+| 操作 | Claude Code | Codex | Gemini | OpenCode | Aider |
+|------|-------------|-------|--------|----------|-------|
+| 帮助 | `/help` | `/help` | `/help` | `/help` | `/help` |
+| 清除 | `/clear` | `/clear` | `/clear` | `/clear` | `/clear` |
+| 切换模型 | `/model` | `/model` | `/model` | `/model` | `/model` |
+| 添加文件 | `/add` | `/add` | `/add` | `/add` | `/add` |
+| 撤销 | - | `/undo` | - | `/undo` | `/undo` |
+| 退出 | `/quit` | `/exit` | `/quit` | `/quit` | `/quit` |
+
+### 关键差异一览
+
+| | Claude | Codex | Gemini | OpenCode | Aider |
+|---|:---:|:---:|:---:|:---:|:---:|
+| 免费 | ❌ | ❌ | ✅ | 取决于模型 | 取决于模型 |
+| 开源 | ❌ | ❌ | ❌ | ✅ | ✅ |
+| 本地模型 | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Git 集成 | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| 代码理解 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+
+### 代理配置（国内必备）
+
+```bash
+# 添加到 ~/.zshrc 或 ~/.bashrc
+export http_proxy="http://127.0.0.1:7890"
+export https_proxy="http://127.0.0.1:7890"
+```
+
+### 多任务并行（CLI 核心优势）
+
+```bash
+# 用 tmux 开 3 个窗格同时工作
+tmux new -s dev
+Ctrl+b %  # 垂直分割
+Ctrl+b "  # 水平分割
+
+# 窗格1: claude "实现后端 API"
+# 窗格2: claude "实现前端页面"
+# 窗格3: claude "编写单元测试"
+# 效率提升 3x！
+```
+
+### API Key 管理
+
+```bash
+# 方式1: ccuswitcher（推荐）
+npm i -g ccuswitcher
+ccswitch add work sk-ant-xxx
+ccswitch use work
+
+# 方式2: 自定义函数
+claude-key() { export ANTHROPIC_API_KEY=$1; }
+```
+
+### 费用控制技巧
+
+```
+1. 简单任务用 Haiku/GPT-4o-mini（便宜 10x）
+2. /compact 压缩上下文（省 token）
+3. .claudeignore 排除大文件
+4. Gemini CLI 免费额度：1500次/天
 ```
 
 ---
