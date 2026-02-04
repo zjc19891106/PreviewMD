@@ -11,6 +11,9 @@
 - [Claude Code 完全指南](#claude-code-完全指南)
 - [OpenAI Codex CLI 完全指南](#openai-codex-cli-完全指南)
 - [Gemini CLI 完全指南](#gemini-cli-完全指南)
+- [Kiro CLI 完全指南](#kiro-cli-完全指南)
+- [OpenCode 完全指南](#opencode-完全指南)
+- [Aider 完全指南](#aider-完全指南)
 - [代理配置（翻墙）](#代理配置翻墙)
 - [多任务并行工作流](#多任务并行工作流)
 - [CLI 进阶技巧](#cli-进阶技巧)
@@ -95,6 +98,7 @@ done
 | **Claude Code** | Anthropic | Claude Sonnet/Opus | 最强代码理解，支持 200K 上下文 | API 按量付费，或者月度套餐 |
 | **Codex CLI** | OpenAI | GPT-4o/o1 | 多模型支持，生态丰富 | API 按量付费，或者月度套餐 |
 | **Gemini CLI** | Google | Gemini 2.5 Pro | 免费额度大，支持多模态 | 免费 + API |
+| **Kiro CLI** | AWS/Amazon | Claude 系列 | Spec 驱动开发，Agent Hooks，MCP 支持 | AWS 订阅 |
 | **OpenCode** | 开源社区 | 多模型 | Go 编写，轻量快速，支持 LSP | 仅 API 费用 |
 | **Aider** | 开源社区 | 多模型 | Git 集成强，支持多文件编辑 | 仅 API 费用 |
 
@@ -103,6 +107,7 @@ done
 ```
 新手入门 → Gemini CLI（免费额度大）
 专业开发 → Claude Code（代码理解最强）
+AWS 生态 → Kiro CLI（深度 AWS 集成）
 多模型需求 → Codex CLI / OpenCode
 预算有限 → Gemini CLI + Aider（开源 + 免费额度）
 极致轻量 → OpenCode（Go 编写，启动快）
@@ -122,42 +127,44 @@ Git 重度用户 → Aider（Git 集成最强）
   - 没有 LSP：AI 只能通过文本分析猜测代码结构
   - 有 LSP：AI 能获得编译器级别的代码理解
   
-### 📊 五大 CLI 工具全面横向对比
+### 📊 六大 CLI 工具全面横向对比
 
 #### 基础信息对比
 
-| 维度 | Claude Code | Codex CLI | Gemini CLI | OpenCode | Aider |
-|------|-------------|-----------|------------|----------|-------|
-| **开发商** | Anthropic | OpenAI | Google | 开源社区 | 开源社区 |
-| **编写语言** | TypeScript | TypeScript | TypeScript | Go | Python |
-| **默认模型** | Claude Sonnet | GPT-4o | Gemini 2.5 Pro | 多模型 | 多模型 |
-| **上下文窗口** | 200K tokens | 128K tokens | 1M tokens | 取决于模型 | 取决于模型 |
-| **开源** | ❌ | ❌ | ❌ | ✅ | ✅ |
+| 维度 | Claude Code | Codex CLI | Gemini CLI | Kiro CLI | OpenCode | Aider |
+|------|-------------|-----------|------------|----------|----------|-------|
+| **开发商** | Anthropic | OpenAI | Google | AWS/Amazon | 开源社区 | 开源社区 |
+| **编写语言** | TypeScript | TypeScript | TypeScript | TypeScript | Go | Python |
+| **默认模型** | Claude Sonnet | GPT-4o | Gemini 2.5 Pro | Claude 系列 | 多模型 | 多模型 |
+| **上下文窗口** | 200K tokens | 128K tokens | 1M tokens | 200K tokens | 取决于模型 | 取决于模型 |
+| **开源** | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
 
 #### 安装与配置
 
-| 维度 | Claude Code | Codex CLI | Gemini CLI | OpenCode | Aider |
-|------|-------------|-----------|------------|----------|-------|
-| **安装方式** | npm | npm | npm/curl | brew/go | pip/brew |
-| **认证方式** | API Key+订阅 | API Key+订阅 | Google 账号/API Key+订阅 | API Key+订阅 | API Key+订阅 |
-| **配置文件** | ~/.claude/ | ~/.codex/ | ~/.gemini/ | ~/.config/opencode/ | ~/.aider.conf.yml |
-| **项目配置** | CLAUDE.md | instructions.md | GEMINI.md | prompts/ | .aider.conf.yml |
+| 维度 | Claude Code | Codex CLI | Gemini CLI | Kiro CLI | OpenCode | Aider |
+|------|-------------|-----------|------------|----------|----------|-------|
+| **安装方式** | npm/brew | npm/brew | npm/brew/curl | curl/brew | brew/go | pip/brew |
+| **认证方式** | API Key+订阅 | API Key+订阅 | Google 账号/API Key | AWS 账号/浏览器登录 | API Key+订阅 | API Key+订阅 |
+| **配置文件** | ~/.claude/ | ~/.codex/ | ~/.gemini/ | ~/.kiro/ | ~/.config/opencode/ | ~/.aider.conf.yml |
+| **项目配置** | CLAUDE.md | instructions.md | GEMINI.md | KIRO.md | prompts/ | .aider.conf.yml |
 
 #### 功能特性对比
 
-| 功能 | Claude Code | Codex CLI | Gemini CLI | OpenCode | Aider |
-|------|:-----------:|:---------:|:----------:|:--------:|:-----:|
-| **多模型支持** | ⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **Git 集成** | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **多文件编辑** | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **代码理解** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **多模态** | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐ |
-| **插件/扩展** | Skills/MCP | ❌ | ❌ | oh-my-opencode | ❌ |
-| **LSP 支持** | ✅ | ❌ | ❌ | ✅ | ❌ |
-| **沙盒模式** | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **语音输入** | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Web UI** | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **本地模型** | ❌ | ❌ | ❌ | ✅ Ollama | ✅ Ollama |
+| 功能 | Claude Code | Codex CLI | Gemini CLI | Kiro CLI | OpenCode | Aider |
+|------|:-----------:|:---------:|:----------:|:--------:|:--------:|:-----:|
+| **多模型支持** | ⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Git 集成** | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **多文件编辑** | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **代码理解** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **多模态** | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ |
+| **插件/扩展** | Skills/MCP | ❌ | ❌ | Agent Hooks/MCP | oh-my-opencode | ❌ |
+| **LSP 支持** | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **沙盒模式** | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **语音输入** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Web UI** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **本地模型** | ❌ | ❌ | ❌ | ❌ | ✅ Ollama | ✅ Ollama |
+| **Spec 驱动开发** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **持久化聊天历史** | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ |
 
 #### 斜杠命令数量
 
@@ -166,6 +173,7 @@ Git 重度用户 → Aider（Git 集成最强）
 | **Claude Code** | 30+ | `/compact`, `/memory`, `/mcp`, `/skills` |
 | **Codex CLI** | 21 | `/approval`, `/undo`, `/run` |
 | **Gemini CLI** | 20+ | `/sandbox`, `/image`, `/export` |
+| **Kiro CLI** | 15+ | `/context`, `/model`, `/help`, `/clear` |
 | **OpenCode** | 21 | `/provider`, `/tokens`, `/cost` |
 | **Aider** | 27 | `/architect`, `/voice`, `/web`, `/map` |
 
@@ -176,6 +184,7 @@ Git 重度用户 → Aider（Git 集成最强）
 | **Claude Code** | API 按量 | 无 | Sonnet: $3/$15, Opus: $15/$75 |
 | **Codex CLI** | API 按量 | 无 | GPT-4o: $2.5/$10 |
 | **Gemini CLI** | 免费+API | 1500次/天 | Pro: $1.25/$5 |
+| **Kiro CLI** | AWS 订阅 | 有限免费试用 | 包含在 AWS 订阅中 |
 | **OpenCode** | 仅 API | 取决于提供商 | 取决于选择的模型 |
 | **Aider** | 仅 API | 取决于提供商 | 取决于选择的模型 |
 
@@ -186,6 +195,7 @@ Git 重度用户 → Aider（Git 集成最强）
 | **Claude Code** | 代码理解最强、200K 上下文、Skills 扩展 | 无免费额度、不支持本地模型 |
 | **Codex CLI** | OpenAI 生态、多模型、稳定 | 功能相对基础、无插件系统 |
 | **Gemini CLI** | 免费额度大、1M 上下文、多模态强 | 国内访问困难、功能较新 |
+| **Kiro CLI** | Spec 驱动开发、AWS 深度集成、Agent Hooks | 需要 AWS 账号、生态较新 |
 | **OpenCode** | 极速启动、多模型、LSP、插件系统 | 社区较小、文档较少 |
 | **Aider** | Git 集成最强、多文件编辑、架构师模式 | Python 依赖、启动稍慢 |
 
@@ -195,6 +205,7 @@ Git 重度用户 → Aider（Git 集成最强）
 |------|----------|------|
 | **企业级开发** | Claude Code | 代码理解强、安全性高 |
 | **新手学习** | Gemini CLI | 免费、上手简单 |
+| **AWS 项目** | Kiro CLI | 深度 AWS 集成、Spec 驱动开发 |
 | **开源项目** | Aider | Git 集成、自动提交 |
 | **多模型实验** | OpenCode | 支持所有主流模型 |
 | **快速原型** | Codex CLI | 稳定、生态丰富 |
@@ -911,6 +922,220 @@ Gemini CLI 在交互模式下支持以下斜杠命令：
 | `/auth` | 查看认证状态 | `/auth` |
 | `/login` | 登录 Google 账号 | `/login` |
 | `/logout` | 退出登录 | `/logout` |
+
+---
+
+## Kiro CLI 完全指南
+
+[Kiro](https://kiro.dev) 是 AWS/Amazon 推出的 AI 驱动 IDE 和 CLI 工具，与 Amazon Q Developer 深度集成，特点是 Spec 驱动开发和 Agent Hooks 自动化。
+
+### 1. 安装
+
+#### macOS
+
+```bash
+# Homebrew（推荐）
+brew install kiro-cli
+
+# 或使用 curl
+curl -fsSL https://cli.kiro.dev/install | bash
+
+# 验证安装
+kiro-cli version
+```
+
+#### Linux
+
+```bash
+# 通用安装
+curl -fsSL https://cli.kiro.dev/install | bash
+
+# Ubuntu/Debian（.deb 包）
+sudo dpkg -i kiro-cli.deb
+sudo apt-get install -f
+
+# Arm Linux
+curl --proto '=https' --tlsv1.2 -sSf 'https://desktop-release.q.us-east-1.amazonaws.com/latest/kirocli-aarch64-linux.zip' -o 'kirocli.zip'
+unzip kirocli.zip
+bash ./kirocli/install.sh
+
+# 验证安装
+kiro-cli version
+```
+
+#### Windows
+
+```bash
+# 通过 WSL（Windows Subsystem for Linux）安装
+wsl
+curl -fsSL https://cli.kiro.dev/install | bash
+```
+
+#### 系统要求
+
+| 平台 | 要求 |
+|------|------|
+| Windows | Windows 10 (64-bit) 或 11 |
+| macOS | macOS 10.15 (Catalina) 或更高 |
+| Linux | Ubuntu 18.04+、CentOS 7+ 等，glibc 2.34+ |
+| 通用 | 4GB RAM（推荐 8GB），500MB 磁盘空间 |
+
+### 2. 认证配置
+
+Kiro CLI 使用浏览器登录方式认证：
+
+```bash
+# 首次运行会打开浏览器进行 AWS 账号登录
+kiro-cli
+
+# 或手动触发认证
+kiro-cli auth login
+```
+
+登录后，Kiro CLI 会与 Amazon Q Developer 共享订阅，无需额外配置 API Key。
+
+### 3. 基本使用
+
+```bash
+# 启动交互模式
+kiro-cli
+
+# 在项目目录中启动
+cd your-project
+kiro-cli
+
+# 直接提问
+kiro-cli "帮我分析这个项目的架构"
+```
+
+### 4. 核心特性
+
+#### Spec 驱动开发（Spec-Driven Development）
+
+Kiro 的独特功能，先写规格说明再生成代码：
+
+```bash
+# 在交互模式中
+> 为用户认证模块创建 spec
+
+# Kiro 会生成详细的规格文档，包括：
+# - 功能需求
+# - API 设计
+# - 数据模型
+# - 测试用例
+
+# 确认后自动生成符合 spec 的代码
+```
+
+#### Agent Hooks
+
+自动化钩子，在特定事件触发时执行：
+
+```yaml
+# KIRO.md 或 .kiro/hooks.yaml
+hooks:
+  on_file_save:
+    - run: npm run lint
+    - run: npm run test
+  on_commit:
+    - run: npm run build
+```
+
+#### MCP（Model Context Protocol）支持
+
+连接外部工具和服务：
+
+```bash
+# 查看已连接的 MCP 服务
+/context
+
+# Kiro 可以通过 MCP 连接：
+# - 文件系统
+# - 数据库
+# - API 服务
+# - 云资源
+```
+
+#### 持久化聊天历史
+
+Kiro CLI 会按项目目录保存聊天历史，下次进入同一目录时可以继续之前的对话。
+
+### 5. 内置斜杠命令
+
+Kiro CLI 在交互模式下支持以下斜杠命令：
+
+| 命令 | 作用 | 示例 |
+|------|------|------|
+| `/help` | 查看帮助信息 | `/help` |
+| `/quit` | 退出 Kiro CLI | `/quit` |
+| `/clear` | 清除当前会话上下文 | `/clear` |
+| `/context` | 查看/管理上下文和 MCP 连接 | `/context` |
+| `/model` | 切换模型 | `/model` |
+| `/history` | 查看对话历史 | `/history` |
+| `/spec` | 创建或查看规格文档 | `/spec create auth` |
+| `/hooks` | 管理 Agent Hooks | `/hooks list` |
+
+### 6. 配置文件
+
+```bash
+# 全局配置位置
+~/.kiro/
+├── config.json        # 主配置
+├── auth/              # 认证信息
+└── history/           # 聊天历史
+
+# 项目级配置
+your-project/
+├── .kiro/
+│   ├── hooks.yaml     # Agent Hooks 配置
+│   └── settings.json  # 项目设置
+└── KIRO.md            # 项目指令（类似 CLAUDE.md）
+```
+
+#### KIRO.md 示例
+
+```markdown
+# 项目说明
+
+这是一个 AWS Lambda + DynamoDB 项目。
+
+## 开发规范
+- 使用 TypeScript 严格模式
+- 所有 Lambda 函数需要有单元测试
+- 遵循 AWS 最佳实践
+
+## 架构说明
+- API Gateway -> Lambda -> DynamoDB
+- 使用 SAM 进行部署
+```
+
+### 7. 与 Amazon Q Developer 集成
+
+Kiro CLI 与 Amazon Q Developer CLI 共享订阅，可以无缝切换：
+
+```bash
+# 使用 Kiro CLI
+kiro-cli "优化这个 Lambda 函数"
+
+# 使用 Amazon Q Developer CLI
+q "分析这个 CloudFormation 模板"
+```
+
+### 8. 安全特性
+
+Kiro CLI 在 2025 年 10 月增加了安全增强：
+
+- **Human-in-the-Loop 确认**：危险操作需要用户确认
+- **权限控制**：可配置允许的操作范围
+- **审计日志**：记录所有 AI 操作
+
+```bash
+# 查看安全设置
+kiro-cli config security
+
+# 启用严格模式（所有操作需确认）
+kiro-cli config set security.strict true
+```
 
 ---
 
@@ -2064,6 +2289,27 @@ gemini
 --image file.jpg  # 多模态输入
 ```
 
+### Kiro CLI
+
+```bash
+# 安装
+brew install kiro-cli
+# 或
+curl -fsSL https://cli.kiro.dev/install | bash
+
+# 配置（浏览器登录 AWS 账号）
+kiro-cli auth login
+
+# 启动
+kiro-cli
+
+# 常用命令
+/help            # 帮助
+/context         # 查看上下文
+/spec            # 创建规格文档
+/hooks           # 管理自动化钩子
+```
+
 ### 代理配置
 
 ```bash
@@ -2083,6 +2329,7 @@ export https_proxy="http://127.0.0.1:7890"
 ```
 💡 新手免费体验 → Gemini CLI
 💼 专业开发首选 → Claude Code
+☁️ AWS 生态用户 → Kiro CLI
 🔧 多模型玩家 → OpenCode / Aider
 💰 预算有限 → Gemini CLI（免费）+ Aider（开源）
 ```
@@ -2099,6 +2346,9 @@ npm i -g @openai/codex && export OPENAI_API_KEY="sk-xxx"
 # Gemini CLI
 npm i -g @google/gemini-cli && gemini auth login
 
+# Kiro CLI
+curl -fsSL https://cli.kiro.dev/install | bash && kiro-cli auth login
+
 # OpenCode
 brew install opencode-ai/tap/opencode
 
@@ -2108,24 +2358,24 @@ pip install aider-chat
 
 ### 核心命令速记
 
-| 操作 | Claude Code | Codex | Gemini | OpenCode | Aider |
-|------|-------------|-------|--------|----------|-------|
-| 帮助 | `/help` | `/help` | `/help` | `/help` | `/help` |
-| 清除 | `/clear` | `/clear` | `/clear` | `/clear` | `/clear` |
-| 切换模型 | `/model` | `/model` | `/model` | `/model` | `/model` |
-| 添加文件 | `/add` | `/add` | `/add` | `/add` | `/add` |
-| 撤销 | - | `/undo` | - | `/undo` | `/undo` |
-| 退出 | `/quit` | `/exit` | `/quit` | `/quit` | `/quit` |
+| 操作 | Claude Code | Codex | Gemini | Kiro | OpenCode | Aider |
+|------|-------------|-------|--------|------|----------|-------|
+| 帮助 | `/help` | `/help` | `/help` | `/help` | `/help` | `/help` |
+| 清除 | `/clear` | `/clear` | `/clear` | `/clear` | `/clear` | `/clear` |
+| 切换模型 | `/model` | `/model` | `/model` | `/model` | `/model` | `/model` |
+| 添加文件 | `/add` | `/add` | `/add` | - | `/add` | `/add` |
+| 撤销 | - | `/undo` | - | - | `/undo` | `/undo` |
+| 退出 | `/quit` | `/exit` | `/quit` | `/quit` | `/quit` | `/quit` |
 
 ### 关键差异一览
 
-| | Claude | Codex | Gemini | OpenCode | Aider |
-|---|:---:|:---:|:---:|:---:|:---:|
-| 免费 | ❌ | ❌ | ✅ | 取决于模型 | 取决于模型 |
-| 开源 | ❌ | ❌ | ❌ | ✅ | ✅ |
-| 本地模型 | ❌ | ❌ | ❌ | ✅ | ✅ |
-| Git 集成 | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| 代码理解 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| | Claude | Codex | Gemini | Kiro | OpenCode | Aider |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| 免费 | ❌ | ❌ | ✅ | 试用 | 取决于模型 | 取决于模型 |
+| 开源 | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| 本地模型 | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Git 集成 | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| 代码理解 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
 
 ### 代理配置（国内必备）
 
@@ -2179,11 +2429,15 @@ claude-key() { export ANTHROPIC_API_KEY=$1; }
 | **Claude Code** | 专业开发、复杂代码理解 | ⭐⭐⭐ | 按量付费 |
 | **Codex CLI** | 多模型需求、OpenAI 生态 | ⭐⭐ | 按量付费 |
 | **Gemini CLI** | 新手入门、预算有限 | ⭐ | 免费额度大 |
+| **Kiro CLI** | AWS 项目、Spec 驱动开发 | ⭐⭐ | AWS 订阅 |
+| **OpenCode** | 多模型、本地部署 | ⭐⭐ | 仅 API 费用 |
+| **Aider** | Git 重度用户、多文件重构 | ⭐⭐ | 仅 API 费用 |
 
 **新手建议路径**：
 1. 从 Gemini CLI 开始（免费）
 2. 熟悉后尝试 Claude Code（更强大）
-3. 根据需求选择长期使用的工具
+3. AWS 用户可考虑 Kiro CLI
+4. 根据需求选择长期使用的工具
 
 **记住**：CLI 的核心优势是**轻量、可控、可自动化**。一旦掌握，你会发现它比 IDE 更高效。
 

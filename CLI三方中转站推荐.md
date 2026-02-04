@@ -103,13 +103,34 @@ npx @google/gemini-cli
 
 ---
 
-## 4. OpenRouter
+## 4. Kiro (AWS/Amazon)
+
+AWS 推出的 AI 驱动 IDE，支持 CLI 模式。
+
+### 安装方式
+
+- **Linux**: 下载 AppImage 或 zip 文件
+- **Windows**: 通过 WSL 安装
+- **要求**: glibc 2.34+（旧系统可用 musl 版本）
+
+### 特性
+
+- Spec-Driven Development（规格驱动开发）
+- Vibe Coding（对话式快速原型）
+- Agent Hooks（自动化钩子）
+- Steering Rules（开发风格定义）
+
+> 💡 **提示**: ByteCatCode 的反代服务就是基于逆向 Kiro 实现的
+
+---
+
+## 5. OpenRouter
 
 通用 API 路由服务，支持多种模型接入
 
 ---
 
-## 5. 国产 CLI 方案 🇨🇳
+## 6. 国产 CLI 方案 🇨🇳
 
 也可以支持国产大模型的 CLI 工具：
 
@@ -146,7 +167,7 @@ MiniMax 暂无独立 CLI，主要通过 API Key 接入其他 CLI 工具（如 Op
 
 ---
 
-## 6. 官方订阅替代方案
+## 7. 官方订阅替代方案
 
 ### 方案 A：外区 Apple ID + 礼品卡 ⭐ 推荐
 
