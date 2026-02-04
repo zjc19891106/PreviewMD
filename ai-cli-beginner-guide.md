@@ -12,8 +12,10 @@
 - [OpenAI Codex CLI 完全指南](#openai-codex-cli-完全指南)
 - [Gemini CLI 完全指南](#gemini-cli-完全指南)
 - [Kiro CLI 完全指南](#kiro-cli-完全指南)
+- [GitHub Copilot CLI 完全指南](#github-copilot-cli-完全指南)
 - [OpenCode 完全指南](#opencode-完全指南)
 - [Aider 完全指南](#aider-完全指南)
+- [国产 CLI 工具](#国产-cli-工具)
 - [代理配置（翻墙）](#代理配置翻墙)
 - [多任务并行工作流](#多任务并行工作流)
 - [CLI 进阶技巧](#cli-进阶技巧)
@@ -99,6 +101,7 @@ done
 | **Codex CLI** | OpenAI | GPT-4o/o1 | 多模型支持，生态丰富 | API 按量付费，或者月度套餐 |
 | **Gemini CLI** | Google | Gemini 2.5 Pro | 免费额度大，支持多模态 | 免费 + API |
 | **Kiro CLI** | AWS/Amazon | Claude 系列 | Spec 驱动开发，Agent Hooks，MCP 支持 | AWS 订阅 |
+| **Copilot CLI** | GitHub | 多模型 | GitHub 深度集成，PR/Issues 管理 | GitHub Copilot 订阅 |
 | **OpenCode** | 开源社区 | 多模型 | Go 编写，轻量快速，支持 LSP | 仅 API 费用 |
 | **Aider** | 开源社区 | 多模型 | Git 集成强，支持多文件编辑 | 仅 API 费用 |
 
@@ -108,6 +111,7 @@ done
 新手入门 → Gemini CLI（免费额度大）
 专业开发 → Claude Code（代码理解最强）
 AWS 生态 → Kiro CLI（深度 AWS 集成）
+GitHub 用户 → Copilot CLI（GitHub 深度集成）
 多模型需求 → Codex CLI / OpenCode
 预算有限 → Gemini CLI + Aider（开源 + 免费额度）
 极致轻量 → OpenCode（Go 编写，启动快）
@@ -127,44 +131,45 @@ Git 重度用户 → Aider（Git 集成最强）
   - 没有 LSP：AI 只能通过文本分析猜测代码结构
   - 有 LSP：AI 能获得编译器级别的代码理解
   
-### 📊 六大 CLI 工具全面横向对比
+### 📊 七大 CLI 工具全面横向对比
 
 #### 基础信息对比
 
-| 维度 | Claude Code | Codex CLI | Gemini CLI | Kiro CLI | OpenCode | Aider |
-|------|-------------|-----------|------------|----------|----------|-------|
-| **开发商** | Anthropic | OpenAI | Google | AWS/Amazon | 开源社区 | 开源社区 |
-| **编写语言** | TypeScript | TypeScript | TypeScript | TypeScript | Go | Python |
-| **默认模型** | Claude Sonnet | GPT-4o | Gemini 2.5 Pro | Claude 系列 | 多模型 | 多模型 |
-| **上下文窗口** | 200K tokens | 128K tokens | 1M tokens | 200K tokens | 取决于模型 | 取决于模型 |
-| **开源** | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| 维度 | Claude Code | Codex CLI | Gemini CLI | Kiro CLI | Copilot CLI | OpenCode | Aider |
+|------|-------------|-----------|------------|----------|-------------|----------|-------|
+| **开发商** | Anthropic | OpenAI | Google | AWS/Amazon | GitHub | 开源社区 | 开源社区 |
+| **编写语言** | TypeScript | TypeScript | TypeScript | TypeScript | TypeScript | Go | Python |
+| **默认模型** | Claude Sonnet | GPT-4o | Gemini 2.5 Pro | Claude 系列 | 多模型 | 多模型 | 多模型 |
+| **上下文窗口** | 200K tokens | 128K tokens | 1M tokens | 200K tokens | 取决于模型 | 取决于模型 | 取决于模型 |
+| **开源** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
 
 #### 安装与配置
 
-| 维度 | Claude Code | Codex CLI | Gemini CLI | Kiro CLI | OpenCode | Aider |
-|------|-------------|-----------|------------|----------|----------|-------|
-| **安装方式** | npm/brew | npm/brew | npm/brew/curl | curl/brew | brew/go | pip/brew |
-| **认证方式** | API Key+订阅 | API Key+订阅 | Google 账号/API Key | AWS 账号/浏览器登录 | API Key+订阅 | API Key+订阅 |
-| **配置文件** | ~/.claude/ | ~/.codex/ | ~/.gemini/ | ~/.kiro/ | ~/.config/opencode/ | ~/.aider.conf.yml |
-| **项目配置** | CLAUDE.md | instructions.md | GEMINI.md | KIRO.md | prompts/ | .aider.conf.yml |
+| 维度 | Claude Code | Codex CLI | Gemini CLI | Kiro CLI | Copilot CLI | OpenCode | Aider |
+|------|-------------|-----------|------------|----------|-------------|----------|-------|
+| **安装方式** | npm/brew | npm/brew | npm/brew/curl | curl/brew | npm | brew/go | pip/brew |
+| **认证方式** | API Key+订阅 | API Key+订阅 | Google 账号/API Key | AWS 账号/浏览器登录 | GitHub 登录 | API Key+订阅 | API Key+订阅 |
+| **配置文件** | ~/.claude/ | ~/.codex/ | ~/.gemini/ | ~/.kiro/ | ~/.copilot/ | ~/.config/opencode/ | ~/.aider.conf.yml |
+| **项目配置** | CLAUDE.md | instructions.md | GEMINI.md | KIRO.md | copilot-instructions.md | prompts/ | .aider.conf.yml |
 
 #### 功能特性对比
 
-| 功能 | Claude Code | Codex CLI | Gemini CLI | Kiro CLI | OpenCode | Aider |
-|------|:-----------:|:---------:|:----------:|:--------:|:--------:|:-----:|
-| **多模型支持** | ⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **Git 集成** | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **多文件编辑** | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **代码理解** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **多模态** | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ |
-| **插件/扩展** | Skills/MCP | ❌ | ❌ | Agent Hooks/MCP | oh-my-opencode | ❌ |
-| **LSP 支持** | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **沙盒模式** | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **语音输入** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Web UI** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **本地模型** | ❌ | ❌ | ❌ | ❌ | ✅ Ollama | ✅ Ollama |
-| **Spec 驱动开发** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **持久化聊天历史** | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| 功能 | Claude Code | Codex CLI | Gemini CLI | Kiro CLI | Copilot CLI | OpenCode | Aider |
+|------|:-----------:|:---------:|:----------:|:--------:|:-----------:|:--------:|:-----:|
+| **多模型支持** | ⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Git 集成** | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **多文件编辑** | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **代码理解** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **多模态** | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ |
+| **插件/扩展** | Skills/MCP | ❌ | ❌ | Agent Hooks/MCP | MCP | oh-my-opencode | ❌ |
+| **LSP 支持** | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **沙盒模式** | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **语音输入** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Web UI** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **本地模型** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ Ollama | ✅ Ollama |
+| **Spec 驱动开发** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **持久化聊天历史** | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| **PR/Issues 管理** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
 
 #### 斜杠命令数量
 
@@ -174,6 +179,7 @@ Git 重度用户 → Aider（Git 集成最强）
 | **Codex CLI** | 21 | `/approval`, `/undo`, `/run` |
 | **Gemini CLI** | 20+ | `/sandbox`, `/image`, `/export` |
 | **Kiro CLI** | 15+ | `/context`, `/model`, `/help`, `/clear` |
+| **Copilot CLI** | 15+ | `/login`, `/mcp`, `/add-dir`, `/list-dirs` |
 | **OpenCode** | 21 | `/provider`, `/tokens`, `/cost` |
 | **Aider** | 27 | `/architect`, `/voice`, `/web`, `/map` |
 
@@ -185,6 +191,7 @@ Git 重度用户 → Aider（Git 集成最强）
 | **Codex CLI** | API 按量 | 无 | GPT-4o: $2.5/$10 |
 | **Gemini CLI** | 免费+API | 1500次/天 | Pro: $1.25/$5 |
 | **Kiro CLI** | AWS 订阅 | 有限免费试用 | 包含在 AWS 订阅中 |
+| **Copilot CLI** | 订阅制 | 无 | $10-19/月（个人/商业） |
 | **OpenCode** | 仅 API | 取决于提供商 | 取决于选择的模型 |
 | **Aider** | 仅 API | 取决于提供商 | 取决于选择的模型 |
 
@@ -196,6 +203,7 @@ Git 重度用户 → Aider（Git 集成最强）
 | **Codex CLI** | OpenAI 生态、多模型、稳定 | 功能相对基础、无插件系统 |
 | **Gemini CLI** | 免费额度大、1M 上下文、多模态强 | 国内访问困难、功能较新 |
 | **Kiro CLI** | Spec 驱动开发、AWS 深度集成、Agent Hooks | 需要 AWS 账号、生态较新 |
+| **Copilot CLI** | GitHub 深度集成、多模型支持、PR/Issues 管理 | 需订阅、旧版即将停用 |
 | **OpenCode** | 极速启动、多模型、LSP、插件系统 | 社区较小、文档较少 |
 | **Aider** | Git 集成最强、多文件编辑、架构师模式 | Python 依赖、启动稍慢 |
 
@@ -206,6 +214,7 @@ Git 重度用户 → Aider（Git 集成最强）
 | **企业级开发** | Claude Code | 代码理解强、安全性高 |
 | **新手学习** | Gemini CLI | 免费、上手简单 |
 | **AWS 项目** | Kiro CLI | 深度 AWS 集成、Spec 驱动开发 |
+| **GitHub 项目** | Copilot CLI | PR/Issues 管理、GitHub 深度集成 |
 | **开源项目** | Aider | Git 集成、自动提交 |
 | **多模型实验** | OpenCode | 支持所有主流模型 |
 | **快速原型** | Codex CLI | 稳定、生态丰富 |
@@ -1139,6 +1148,183 @@ kiro-cli config set security.strict true
 
 ---
 
+## GitHub Copilot CLI 完全指南
+
+[GitHub Copilot CLI](https://github.com/features/copilot) 是 GitHub 官方推出的 AI 编码 CLI 工具，与 GitHub 生态深度集成。
+
+### 1. 安装
+
+```bash
+# npm 安装（推荐）
+npm install -g @github/copilot
+
+# 验证安装
+copilot --version
+```
+
+> ⚠️ **重要**: 旧版 `gh copilot` 命令将于 **2025年10月25日** 停用，请迁移到新版 npm 包
+
+### 2. 认证配置
+
+```bash
+# 首次运行会引导登录
+copilot
+
+# 或手动登录
+/login
+
+# 登录会打开浏览器进行 GitHub OAuth 认证
+```
+
+需要有效的 GitHub Copilot 订阅：
+- **个人版**: $10/月 或 $100/年
+- **商业版**: $19/月/用户
+- **企业版**: $39/月/用户
+
+### 3. 基本使用
+
+```bash
+# 启动交互模式
+copilot
+
+# 在项目目录中启动
+cd your-project
+copilot
+
+# 直接提问
+copilot "帮我分析这个 PR 的改动"
+```
+
+### 4. 核心特性
+
+#### GitHub 深度集成
+
+Copilot CLI 与 GitHub 无缝集成：
+
+```bash
+# 管理 Pull Requests
+> 查看 PR #123 的所有评论
+
+# 处理 Issues
+> 分析 Issue #456 并给出解决方案
+
+# 代码审查
+> 审查当前分支与 main 的差异
+```
+
+#### 多模型支持
+
+支持切换不同的 AI 模型：
+
+```bash
+# 切换模型
+/model
+
+# 支持的模型包括：
+# - Claude Sonnet 4
+# - GPT-4o
+# - 其他
+```
+
+#### 指令文件支持
+
+Copilot CLI 可以读取多种项目指令文件：
+
+```bash
+# 支持的指令文件（按优先级）
+.github/copilot-instructions.md
+CLAUDE.md
+GEMINI.md
+```
+
+#### MCP 支持
+
+```bash
+# 管理 MCP 服务器
+/mcp show           # 显示所有 MCP 服务器
+/mcp add <name>     # 添加 MCP 服务器
+/mcp delete <name>  # 删除 MCP 服务器
+/mcp enable <name>  # 启用 MCP 服务器
+/mcp disable <name> # 禁用 MCP 服务器
+```
+
+### 5. 内置斜杠命令
+
+| 命令 | 作用 | 示例 |
+|------|------|------|
+| `/login` | 登录 GitHub 账号 | `/login` |
+| `/logout` | 退出登录 | `/logout` |
+| `/help` | 查看帮助信息 | `/help` |
+| `/clear` | 清除屏幕上的聊天历史 | `/clear` |
+| `/exit` | 退出 CLI | `/exit` |
+| `/model` | 切换 AI 模型 | `/model` |
+| `/mcp` | 管理 MCP 服务器 | `/mcp show` |
+| `/add-dir` | 添加目录到允许访问列表 | `/add-dir src/` |
+| `/list-dirs` | 列出允许访问的目录 | `/list-dirs` |
+| `/cwd` | 查看/切换工作目录 | `/cwd` |
+| `/feedback` | 提交反馈 | `/feedback` |
+| `/reset-allowed-tools` | 重置允许的工具列表 | `/reset-allowed-tools` |
+
+### 6. 配置文件
+
+```bash
+# 全局配置位置
+~/.copilot/
+├── config.json        # 主配置
+├── auth/              # 认证信息
+└── mcp/               # MCP 配置
+
+# 项目级配置
+your-project/
+└── .github/
+    └── copilot-instructions.md  # 项目指令
+```
+
+#### copilot-instructions.md 示例
+
+```markdown
+# 项目说明
+
+这是一个使用 Next.js + TypeScript 的项目。
+
+## 代码规范
+- 使用 ESLint + Prettier
+- 组件使用函数式写法
+- 使用 Tailwind CSS
+
+## GitHub 工作流
+- 分支命名：feature/xxx, fix/xxx
+- PR 需要至少一个 review
+- 合并使用 squash merge
+```
+
+### 7. 企业功能
+
+企业版提供额外功能：
+
+- **高风险命令确认**: 危险操作需要人工确认
+- **工具权限细粒度控制**: 可配置允许的工具范围
+- **审计日志**: 记录所有 AI 操作
+- **工具链集成**: 与企业内部工具集成
+
+### 8. 从 gh copilot 迁移
+
+如果你之前使用 `gh copilot`：
+
+```bash
+# 卸载旧版（可选）
+gh extension remove copilot
+
+# 安装新版
+npm install -g @github/copilot
+
+# 重新登录
+copilot
+/login
+```
+
+---
+
 ## OpenCode 完全指南
 
 [OpenCode](https://github.com/opencode-ai/opencode) 是一个用 Go 编写的开源 AI 编程助手 CLI，特点是轻量、快速、支持多模型。
@@ -1545,6 +1731,106 @@ Git 重度用户 → Aider（Git 集成最强）
 多文件重构 → Aider（多文件编辑强）
 本地模型 → 两者都支持 Ollama
 ```
+
+---
+
+## 国产 CLI 工具
+
+对于国内开发者，以下工具无需翻墙即可使用。
+
+### Qoder CLI (阿里通义) ⭐ 推荐
+
+[Qoder](https://qoder.com) 是阿里巴巴推出的 AI 编程 CLI 工具，基于通义千问 Qwen3-Coder 模型。
+
+#### 1. 安装
+
+```bash
+# npm 安装
+npm install -g @qoder-ai/qodercli
+
+# 或使用 curl
+curl -fsSL https://qoder.com/install | bash
+
+# 验证安装
+qoder --version
+```
+
+#### 2. 核心特性
+
+| 特性 | 说明 |
+|------|------|
+| **Quest Mode** | 任务规格式编程，AI 自主完成开发任务 |
+| **CodeReview** | 终端内高效代码审查 |
+| **RepoWiki** | 自动生成代码库结构文档 |
+| **MCP 支持** | 多代理协作协议，支持社区工具生态 |
+| **低延迟** | 响应延迟低至 200ms |
+| **中文优化** | 基于 Qwen3-Coder，中文场景适配更好 |
+
+#### 3. 支持语言
+
+JavaScript、TypeScript、Python、Go、C/C++、C#、Java
+
+#### 4. 优势
+
+- ✅ **国内访问无障碍**：无需翻墙
+- ✅ **内存占用低**：比同类工具降低 70%
+- ✅ **代码审查效率高**：提升 50%
+- ✅ **Worktree 支持**：并行任务处理
+- ✅ **IDE 集成**：支持 IntelliJ IDEA
+
+#### 5. 基本使用
+
+```bash
+# 启动交互模式
+qoder
+
+# 直接提问
+qoder "帮我分析这个项目"
+
+# Quest Mode（任务模式）
+qoder quest "实现用户登录功能"
+
+# 代码审查
+qoder review
+```
+
+### 其他国产方案
+
+#### Kimi CLI (月之暗面)
+
+```bash
+# 安装 uv 包管理器
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 安装 Kimi CLI
+uv tool install --python 3.13 kimi-cli
+
+# 升级
+uv tool upgrade kimi-cli --no-cache
+```
+
+#### GLM 4.7 (智谱 AI)
+
+通过配置环境变量在 Claude Code 中使用智谱模型：
+
+```bash
+# macOS / Linux
+export ANTHROPIC_AUTH_TOKEN="你的智谱API_Key"
+export ANTHROPIC_BASE_URL="https://open.bigmodel.cn/api/anthropic"
+```
+
+> 💡 **提示**: GLM Coding Plan 已升级到 GLM-4.7 模型，性价比更高
+
+### 国产 CLI 对比
+
+| 特性 | Qoder CLI | Kimi CLI | GLM |
+|------|-----------|----------|-----|
+| **底层模型** | Qwen3-Coder | Moonshot | GLM-4.7 |
+| **安装方式** | npm/curl | uv | 环境变量 |
+| **独立 CLI** | ✅ | ✅ | ❌ (借用 CC) |
+| **MCP 支持** | ✅ | ❌ | ❌ |
+| **中文优化** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **代码审查** | ✅ | ❌ | ❌ |
 
 ---
 
@@ -2330,6 +2616,7 @@ export https_proxy="http://127.0.0.1:7890"
 💡 新手免费体验 → Gemini CLI
 💼 专业开发首选 → Claude Code
 ☁️ AWS 生态用户 → Kiro CLI
+🐙 GitHub 用户 → Copilot CLI
 🔧 多模型玩家 → OpenCode / Aider
 💰 预算有限 → Gemini CLI（免费）+ Aider（开源）
 ```
@@ -2349,6 +2636,9 @@ npm i -g @google/gemini-cli && gemini auth login
 # Kiro CLI
 curl -fsSL https://cli.kiro.dev/install | bash && kiro-cli auth login
 
+# Copilot CLI
+npm i -g @github/copilot && copilot
+
 # OpenCode
 brew install opencode-ai/tap/opencode
 
@@ -2358,24 +2648,24 @@ pip install aider-chat
 
 ### 核心命令速记
 
-| 操作 | Claude Code | Codex | Gemini | Kiro | OpenCode | Aider |
-|------|-------------|-------|--------|------|----------|-------|
-| 帮助 | `/help` | `/help` | `/help` | `/help` | `/help` | `/help` |
-| 清除 | `/clear` | `/clear` | `/clear` | `/clear` | `/clear` | `/clear` |
-| 切换模型 | `/model` | `/model` | `/model` | `/model` | `/model` | `/model` |
-| 添加文件 | `/add` | `/add` | `/add` | - | `/add` | `/add` |
-| 撤销 | - | `/undo` | - | - | `/undo` | `/undo` |
-| 退出 | `/quit` | `/exit` | `/quit` | `/quit` | `/quit` | `/quit` |
+| 操作 | Claude | Codex | Gemini | Kiro | Copilot | OpenCode | Aider |
+|------|--------|-------|--------|------|---------|----------|-------|
+| 帮助 | `/help` | `/help` | `/help` | `/help` | `/help` | `/help` | `/help` |
+| 清除 | `/clear` | `/clear` | `/clear` | `/clear` | `/clear` | `/clear` | `/clear` |
+| 切换模型 | `/model` | `/model` | `/model` | `/model` | `/model` | `/model` | `/model` |
+| 添加文件 | `/add` | `/add` | `/add` | - | `/add-dir` | `/add` | `/add` |
+| 撤销 | - | `/undo` | - | - | - | `/undo` | `/undo` |
+| 退出 | `/quit` | `/exit` | `/quit` | `/quit` | `/exit` | `/quit` | `/quit` |
 
 ### 关键差异一览
 
-| | Claude | Codex | Gemini | Kiro | OpenCode | Aider |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|
-| 免费 | ❌ | ❌ | ✅ | 试用 | 取决于模型 | 取决于模型 |
-| 开源 | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| 本地模型 | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| Git 集成 | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| 代码理解 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| | Claude | Codex | Gemini | Kiro | Copilot | OpenCode | Aider |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| 免费 | ❌ | ❌ | ✅ | 试用 | ❌ | 取决于模型 | 取决于模型 |
+| 开源 | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| 本地模型 | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Git 集成 | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| 代码理解 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
 
 ### 代理配置（国内必备）
 

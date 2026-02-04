@@ -124,13 +124,43 @@ AWS 推出的 AI 驱动 IDE，支持 CLI 模式。
 
 ---
 
-## 5. OpenRouter
+## 5. GitHub Copilot CLI
+
+GitHub 官方推出的 AI 编码 CLI 工具。
+
+### 安装方式
+
+```bash
+# npm 安装
+npm install -g @github/copilot
+
+# 启动
+copilot
+
+# 首次使用需登录
+/login
+```
+
+> ⚠️ **注意**: 旧版 `gh copilot` 命令将于 2025年10月25日 停用，请迁移到新版 npm 包
+
+### 特性
+
+- 支持多模型（包括 Claude Sonnet 4）
+- MCP 支持
+- Git/GitHub 深度集成（PR、Issues 管理）
+- 支持读取 CLAUDE.md、GEMINI.md 等指令文件
+
+**扩展支持**: ✅ MCP
+
+---
+
+## 6. OpenRouter
 
 通用 API 路由服务，支持多种模型接入
 
 ---
 
-## 6. 国产 CLI 方案 🇨🇳
+## 7. 国产 CLI 方案 🇨🇳
 
 也可以支持国产大模型的 CLI 工具：
 
@@ -159,6 +189,30 @@ export ANTHROPIC_BASE_URL="https://open.bigmodel.cn/api/anthropic"
 
 > 💡 **提示**: GLM Coding Plan 已升级到 GLM-4.7 模型，性价比更高
 
+### Qoder CLI (阿里通义) ⭐ 推荐
+
+阿里巴巴推出的 AI 编程 CLI，基于通义千问 Qwen3-Coder 模型。
+
+```bash
+# 安装方式
+npm install -g @qoder-ai/qodercli
+
+# 或使用 curl
+curl -fsSL https://qoder.com/install | bash
+```
+
+**核心特性**：
+- **Quest Mode**: 任务规格式编程，AI 自主完成开发
+- **CodeReview**: 终端内高效代码审查
+- **RepoWiki**: 自动生成代码库文档
+- **MCP 支持**: 多代理协作协议
+- **低延迟**: 响应延迟低至 200ms
+- **中文优化**: 对中文场景适配更好
+
+**支持语言**: JavaScript、TypeScript、Python、Go、C/C++、C#、Java
+
+**优势**: 内存占用降低 70%，代码审查效率提升 50%，国内访问无障碍
+
 ### MiniMax
 
 MiniMax 暂无独立 CLI，主要通过 API Key 接入其他 CLI 工具（如 OpenClaw）使用，或使用其桌面客户端 MiniMax Cowork。
@@ -167,7 +221,7 @@ MiniMax 暂无独立 CLI，主要通过 API Key 接入其他 CLI 工具（如 Op
 
 ---
 
-## 7. 官方订阅替代方案
+## 8. 官方订阅替代方案
 
 ### 方案 A：外区 Apple ID + 礼品卡 ⭐ 推荐
 
