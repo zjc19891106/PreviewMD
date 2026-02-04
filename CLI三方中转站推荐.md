@@ -162,12 +162,21 @@ MiniMax 暂无独立 CLI，主要通过 API Key 接入其他 CLI 工具（如 Op
 
 **Claude Code 最佳方案**: 强烈建议通过 Apple ID 官方订阅，比第三方 API 更稳定安全
 
-### 方案 B：代充服务
+### 方案 B：Google Play 礼品卡
+
+适用于 Gemini CLI 等 Google 服务订阅：
+
+| 优点 | 缺点 |
+|------|------|
+| 无苹果税 | 需要外区 Google 账号 |
+| 支持 Android 设备 | - |
+
+### 方案 C：代充服务
 
 - 需要代充可以加微信联系
 - 已验证：Pro 订阅可代充
 
-### 方案 C：U 卡虚拟信用卡
+### 方案 D：U 卡虚拟信用卡
 
 **操作步骤**:
 
@@ -199,6 +208,7 @@ MiniMax 暂无独立 CLI，主要通过 API Key 接入其他 CLI 工具（如 Op
 | ByteCatCode (CC) | 低 | 中高 | ⭐⭐⭐⭐ |
 | OpenRouter | 中 | 高 | ⭐⭐⭐⭐ |
 | Apple 礼品卡 | 高(含税) | 官方 | ⭐⭐⭐ |
+| Google Play 礼品卡 | 中 | 官方 | ⭐⭐⭐⭐ |
 | U 卡虚拟卡 | 中 | 官方 | ⭐⭐⭐⭐ |
 
 ---
