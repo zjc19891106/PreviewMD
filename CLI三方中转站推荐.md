@@ -6,6 +6,16 @@
 
 ## 1. CodeX (OpenAI)
 
+### 安装方式
+
+```bash
+# Homebrew (推荐)
+brew install --cask codex
+
+# npm
+npm install -g @openai/codex
+```
+
 ### 官方福利 🎉
 
 > ✅ **目前 CodeX 免费开放！** 仅限 Mac 用户
@@ -31,6 +41,16 @@
 ---
 
 ## 2. Claude Code 推荐 - ByteCatCode
+
+### 安装方式
+
+```bash
+# Homebrew (推荐)
+brew install --cask claude-code
+
+# npm
+npm install -g @anthropic-ai/claude-code
+```
 
 - **链接**: https://bytecatcode.org/register?aff=4SX3
 - **服务方式**: 逆向 Kiro 反代提供服务
@@ -58,6 +78,21 @@
 
 ## 3. Gemini CLI (Google)
 
+### 安装方式
+
+```bash
+# Homebrew
+brew install gemini-cli
+
+# npm
+npm install -g @google/gemini-cli
+
+# 免安装试用
+npx @google/gemini-cli
+```
+
+> 💡 **免费额度**: 登录 Google 账号后，免费用户可享 60 次/分钟、1000 次/天的请求额度
+
 支持 Gemini 3 系列模型：
 
 - Gemini 3 Flash
@@ -74,23 +109,44 @@
 
 ---
 
-## 4. 国产 CLI 方案 🇨🇳
+## 5. 国产 CLI 方案 🇨🇳
 
 也可以支持国产大模型的 CLI 工具：
 
-| CLI 工具 | 说明 |
-|----------|------|
-| Kimi CLI | 月之暗面 |
-| GLM 4.7 | 智谱 AI |
-| MiniMax | MiniMax |
+### Kimi CLI (月之暗面)
 
-> 💡 **提示**: GLM 支持在 Claude Code 中使用，具体配置请自行探索
+```bash
+# 安装 uv 包管理器
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 安装 Kimi CLI
+uv tool install --python 3.13 kimi-cli
+
+# 升级
+uv tool upgrade kimi-cli --no-cache
+```
+
+### GLM 4.7 (智谱 AI)
+
+通过配置环境变量在 Claude Code 中使用：
+
+```bash
+# macOS / Linux
+export ANTHROPIC_AUTH_TOKEN="你的智谱API_Key"
+export ANTHROPIC_BASE_URL="https://open.bigmodel.cn/api/anthropic"
+```
+
+> 💡 **提示**: GLM Coding Plan 已升级到 GLM-4.7 模型，性价比更高
+
+### MiniMax
+
+MiniMax 暂无独立 CLI，主要通过 API Key 接入其他 CLI 工具（如 OpenClaw）使用，或使用其桌面客户端 MiniMax Cowork。
 
 **实测参考**: [Linux.do 社区帖子](https://linux.do/t/topic/1544250)
 
 ---
 
-## 5. 官方订阅替代方案
+## 6. 官方订阅替代方案
 
 ### 方案 A：外区 Apple ID + 礼品卡 ⭐ 推荐
 
