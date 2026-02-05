@@ -56,6 +56,7 @@ npm install -g @anthropic-ai/claude-code
 - **服务方式**: 逆向 Kiro 反代提供服务
 - **稳定性**: ⭐⭐⭐⭐ 使用两周暂时稳定
 - **福利**: 不定期群里分发千刀 API Key 使用
+- **分组**: 最好付费使用建议super或者aws那个分组，token设置中最下面那个开关记着打开.
 
 ### 付费方式
 
