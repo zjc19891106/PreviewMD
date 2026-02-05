@@ -35,6 +35,7 @@ npm install -g @openai/codex
 - **链接**: https://nf.video/wYsab/?gid=105
 - **稳定性**: ⭐⭐⭐⭐⭐ 大半年无问题
 - **特点**: 量大管饱
+- **缺点**: 暂不支持opencode正在适配中说是
 
 > ⚠️ **警告**: 不建议在银河购买 Claude Code 服务！走的是官方 API，容易被 Anthropic 封号导致不可用。CC 建议通过 Apple ID 官方订阅更稳妥。
 
