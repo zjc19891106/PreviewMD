@@ -175,12 +175,12 @@ Git 重度用户 → Aider（Git 集成最强）
 
 | 工具 | 命令数量 | 特色命令 |
 |------|:--------:|----------|
-| **Claude Code** | 30+ | `/compact`, `/memory`, `/mcp`, `/skills` |
-| **Codex CLI** | 21 | `/approval`, `/undo`, `/run` |
-| **Gemini CLI** | 20+ | `/sandbox`, `/image`, `/export` |
+| **Claude Code** | 50+ | `/compact`, `/memory`, `/rewind`, `/skills`, `/stats` |
+| **Codex CLI** | 19 | `/permissions`, `/personality`, `/fork`, `/mention` |
+| **Gemini CLI** | 37+ | `/compress`, `/extensions`, `/agents`, `/skills` |
 | **Kiro CLI** | 15+ | `/context`, `/model`, `/help`, `/clear` |
 | **Copilot CLI** | 15+ | `/login`, `/mcp`, `/add-dir`, `/list-dirs` |
-| **OpenCode** | 21 | `/provider`, `/tokens`, `/cost` |
+| **OpenCode** | 2（内置）+ 自定义 | `init`, `compact`（主要通过快捷键操作） |
 | **Aider** | 27 | `/architect`, `/voice`, `/web`, `/map` |
 
 #### 定价对比
@@ -424,18 +424,22 @@ claude --print "解释 main.py 的作用"
 
 ### 6. 内置斜杠命令完整列表
 
-Claude Code 提供了丰富的内置斜杠命令，在会话中输入 `/` 即可查看。
+> 以下命令基于 Claude Code v2.0.76 源码验证。在会话中输入 `/` 即可查看命令弹窗，Tab 键自动补全。
 
 #### 会话管理类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
 | `/help` | 查看帮助信息 | `/help` |
-| `/status` | 查看当前会话状态 | `/status` |
+| `/status` | 查看当前会话状态（版本、模型、账户等） | `/status` |
 | `/clear` | 清除当前会话上下文 | `/clear` |
-| `/compact` | 压缩上下文（节省 token） | `/compact` |
-| `/cost` | 查看当前会话的 API 费用 | `/cost` |
-| `/quit` 或 `/exit` | 退出 Claude Code | `/quit` |
+| `/compact` | 压缩上下文（可附带自定义压缩指令） | `/compact` |
+| `/cost` | 查看当前会话的 token 用量和费用 | `/cost` |
+| `/exit` | 退出 Claude Code（也可用 `Esc` 两次） | `/exit` |
+| `/export` | 导出当前对话到文件或剪贴板 | `/export` |
+| `/rename` | 重命名当前对话 | `/rename` |
+| `/resume` | 恢复之前的会话 | `/resume` |
+| `/tag` | 为会话添加可搜索标签 | `/tag` |
 
 #### 模型与配置类
 
@@ -443,23 +447,19 @@ Claude Code 提供了丰富的内置斜杠命令，在会话中输入 `/` 即可
 |------|------|------|
 | `/model` | 查看或切换模型 | `/model opus` |
 | `/config` | 查看或修改配置 | `/config` |
-| `/permissions` | 管理工具权限 | `/permissions` |
-| `/allowed-tools` | 查看允许使用的工具 | `/allowed-tools` |
+| `/permissions` | 管理工具权限（允许/拒绝） | `/permissions` |
+| `/output-style` | 设置输出风格 | `/output-style` |
+| `/sandbox` | 配置沙箱模式 | `/sandbox` |
 
 #### 文件与上下文类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
-| `/add` | 添加文件到上下文 | `/add src/utils.ts` |
-| `/add-dir` | 添加整个目录到上下文 | `/add-dir src/components` |
-| `/drop` | 从上下文移除文件 | `/drop src/utils.ts` |
+| `/add-dir` | 添加新的工作目录 | `/add-dir src/components` |
+| `/context` | 查看/可视化当前上下文使用情况 | `/context` |
+| `/files` | 列出当前上下文中的所有文件 | `/files` |
 
-#### 会话历史类
-
-| 命令 | 作用 | 示例 |
-|------|------|------|
-| `/resume` | 恢复之前的会话 | `/resume` |
-| `/continue` | 继续最近的会话 | `/continue` |
+> 💡 **注意**：Claude Code 没有 `/add`、`/drop` 命令。添加文件到上下文请使用 `@` 提及或拖拽文件。
 
 #### 账户与认证类
 
@@ -467,45 +467,73 @@ Claude Code 提供了丰富的内置斜杠命令，在会话中输入 `/` 即可
 |------|------|------|
 | `/login` | 登录 Anthropic 账户 | `/login` |
 | `/logout` | 退出登录 | `/logout` |
+| `/upgrade` | 升级到 Max 计划 | `/upgrade` |
+| `/usage` | 显示计划用量限制 | `/usage` |
+| `/extra-usage` | 配置额外用量 | `/extra-usage` |
 
 #### 系统工具类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
-| `/doctor` | 检查 Claude Code 健康状态 | `/doctor` |
-| `/bug` | 报告 bug | `/bug` |
-| `/init` | 初始化项目配置 | `/init` |
-| `/terminal-setup` | 设置终端集成 | `/terminal-setup` |
-| `/vim` | 启用 vim 模式 | `/vim` |
+| `/doctor` | 诊断和排查 Claude Code 问题 | `/doctor` |
+| `/feedback` | 提交反馈（`/bug` 是其别名） | `/feedback` |
+| `/init` | 初始化项目，生成 CLAUDE.md | `/init` |
+| `/install` | 安装 Claude Code 原生构建 | `/install` |
+| `/terminal-setup` | 设置终端集成（快捷键绑定等） | `/terminal-setup` |
+| `/vim` | 切换 vim 模式 | `/vim` |
+| `/theme` | 切换主题 | `/theme` |
+| `/statusline` | 设置状态栏 UI | `/statusline` |
+| `/stats` | 显示使用统计和活动热力图 | `/stats` |
 
-#### 记忆与学习类
+#### 记忆与知识类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
-| `/memory` | 管理 Claude 的记忆 | `/memory` |
-| `/forget` | 让 Claude 忘记某些内容 | `/forget` |
+| `/memory` | 编辑 CLAUDE.md 记忆文件 | `/memory` |
 
-#### MCP 与插件类
+#### MCP、插件与扩展类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
 | `/mcp` | 管理 MCP 服务器 | `/mcp` |
-| `/plugin` | 管理插件 | `/plugin list` |
-| `/install` | 安装插件或扩展 | `/install` |
+| `/plugin` | 管理插件（别名 `/plugins`、`/marketplace`） | `/plugin` |
+| `/skills` | 列出可用的 skills | `/skills` |
+| `/agents` | 管理 agent 配置 | `/agents` |
+| `/hooks` | 管理 hook 配置 | `/hooks` |
 
-#### 任务管理类
-
-| 命令 | 作用 | 示例 |
-|------|------|------|
-| `/tasks` | 查看后台任务 | `/tasks` |
-| `/task-output` | 获取任务输出 | `/task-output <task-id>` |
-
-#### 代码审查类
+#### 任务与计划类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
-| `/review` | 审查代码（需要配置） | `/review` |
-| `/pr-comments` | 查看 PR 评论 | `/pr-comments` |
+| `/tasks` | 列出和管理后台任务 | `/tasks` |
+| `/plan` | 查看当前会话计划 | `/plan` |
+| `/todos` | 列出当前待办事项 | `/todos` |
+
+#### 代码审查与安全类
+
+| 命令 | 作用 | 示例 |
+|------|------|------|
+| `/review` | 审查 Pull Request | `/review` |
+| `/pr-comments` | 获取 GitHub PR 评论 | `/pr-comments` |
+| `/security-review` | 对当前分支进行安全审查 | `/security-review` |
+
+#### 回退与恢复类
+
+| 命令 | 作用 | 示例 |
+|------|------|------|
+| `/rewind` | 恢复代码和对话到之前的检查点 | `/rewind` |
+
+#### 其他
+
+| 命令 | 作用 | 示例 |
+|------|------|------|
+| `/ide` | 管理 IDE 集成 | `/ide` |
+| `/chrome` | Chrome 浏览器集成（Beta） | `/chrome` |
+| `/discover` | 探索 Claude Code 功能 | `/discover` |
+| `/privacy-settings` | 隐私设置 | `/privacy-settings` |
+| `/install-github-app` | 设置 GitHub Actions | `/install-github-app` |
+| `/install-slack-app` | 安装 Slack 应用 | `/install-slack-app` |
+| `/stickers` | 订购 Claude Code 贴纸 🎉 | `/stickers` |
 
 #### 快捷操作
 
@@ -513,10 +541,7 @@ Claude Code 提供了丰富的内置斜杠命令，在会话中输入 `/` 即可
 # 快速查看所有可用命令
 /help
 
-# 查看特定命令的帮助
-/help model
-
-# 使用 Tab 键自动补全命令
+# 输入 / 打开命令弹窗，Tab 键自动补全
 /mo<Tab>  # 自动补全为 /model
 ```
 
@@ -741,41 +766,53 @@ codex --model o1-mini         # o1 mini（更快更便宜）
 
 ### 7. 内置斜杠命令
 
-Codex CLI 在交互模式下支持以下斜杠命令：
+> 以下命令基于 Codex CLI v0.92.0 及 [OpenAI 官方文档](https://developers.openai.com/codex/guides/slash-commands) 验证。在交互模式下输入 `/` 打开命令弹窗。
 
-#### 会话管理类
+#### 会话与导航类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
-| `/help` | 查看帮助信息 | `/help` |
-| `/clear` | 清除当前会话上下文 | `/clear` |
-| `/history` | 查看会话历史 | `/history` |
 | `/exit` 或 `/quit` | 退出 Codex CLI | `/exit` |
+| `/new` | 在同一 CLI 中开始新对话 | `/new` |
+| `/fork` | 分叉当前对话到新线程 | `/fork` |
+| `/resume` | 恢复之前保存的会话 | `/resume` |
+| `/compact` | 压缩对话上下文，释放 token | `/compact` |
 
 #### 模型与配置类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
-| `/model` | 切换模型 | `/model gpt-4o` |
-| `/config` | 查看或修改配置 | `/config` |
-| `/approval` | 设置审批模式 | `/approval suggest` |
+| `/model` | 切换模型和推理强度 | `/model` |
+| `/permissions` | 设置审批策略（`/approvals` 是其隐藏别名） | `/permissions` |
+| `/personality` | 选择沟通风格 | `/personality` |
+| `/status` | 显示会话配置和 token 用量 | `/status` |
 
-#### 文件与上下文类
-
-| 命令 | 作用 | 示例 |
-|------|------|------|
-| `/add` | 添加文件到上下文 | `/add src/main.py` |
-| `/ls` | 列出当前目录文件 | `/ls` |
-| `/cd` | 切换工作目录 | `/cd src` |
-| `/pwd` | 显示当前目录 | `/pwd` |
-
-#### 执行控制类
+#### 文件与工具类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
-| `/run` | 执行上一个建议的命令 | `/run` |
-| `/undo` | 撤销上一个操作 | `/undo` |
-| `/diff` | 显示文件差异 | `/diff` |
+| `/mention` | 附加文件到对话上下文 | `/mention src/main.py` |
+| `/apps` | 浏览并插入应用连接器 | `/apps` |
+| `/mcp` | 列出已配置的 MCP 工具 | `/mcp` |
+| `/skills` | 列出可用的 skills | `/skills` |
+
+#### 代码审查与开发类
+
+| 命令 | 作用 | 示例 |
+|------|------|------|
+| `/diff` | 显示 Git diff（含未跟踪文件） | `/diff` |
+| `/review` | 审查工作区改动 | `/review` |
+| `/init` | 生成 AGENTS.md 项目指令文件 | `/init` |
+| `/ps` | 查看后台终端及其输出 | `/ps` |
+
+#### 账户与反馈类
+
+| 命令 | 作用 | 示例 |
+|------|------|------|
+| `/logout` | 登出 Codex | `/logout` |
+| `/feedback` | 发送日志给维护者 | `/feedback` |
+
+> ⚠️ **注意**：Codex CLI 没有 `/help`、`/clear`、`/history`、`/add`、`/ls`、`/cd`、`/pwd`、`/run` 等命令。这些是其他工具的命令。
 
 ---
 
@@ -877,60 +914,87 @@ gemini --sandbox
 
 ### 8. 内置斜杠命令
 
-Gemini CLI 在交互模式下支持以下斜杠命令：
+> 以下命令基于 Gemini CLI v0.27.0 本地源码验证。许多命令支持子命令，如 `/agents list`、`/mcp enable` 等。
 
 #### 会话管理类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
-| `/help` 或 `/?` | 查看帮助信息 | `/help` |
-| `/clear` | 清除当前会话上下文 | `/clear` |
-| `/reset` | 重置会话（清除所有状态） | `/reset` |
-| `/quit` 或 `/exit` | 退出 Gemini CLI | `/quit` |
-| `/stats` | 查看会话统计信息 | `/stats` |
+| `/help` | 查看帮助信息 | `/help` |
+| `/clear` | 清除屏幕和对话历史 | `/clear` |
+| `/compress` | 压缩上下文（替换为摘要） | `/compress` |
+| `/quit` | 退出 Gemini CLI | `/quit` |
+| `/resume` | 浏览并恢复自动保存的对话 | `/resume` |
+| `/rewind` | 回退到特定消息并重新开始 | `/rewind` |
+| `/restore` | 恢复工具调用状态 | `/restore` |
+| `/copy` | 复制最后结果到剪贴板 | `/copy` |
 
 #### 模型与配置类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
-| `/model` | 切换或查看当前模型 | `/model gemini-2.5-pro` |
-| `/config` | 查看或修改配置 | `/config` |
-| `/settings` | 打开设置 | `/settings` |
-| `/theme` | 切换主题（亮/暗） | `/theme dark` |
+| `/model` | 切换或查看当前模型 | `/model` |
+| `/settings` | 查看/编辑设置 | `/settings` |
+| `/permissions` | 管理文件夹信任和权限 | `/permissions` |
+| `/theme` | 切换主题 | `/theme` |
+| `/editor` | 设置外部编辑器 | `/editor` |
+| `/privacy` | 显示隐私声明 | `/privacy` |
+| `/vim` | 切换 vim 模式 | `/vim` |
 
 #### 文件与上下文类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
-| `/read` | 读取文件内容到上下文 | `/read src/main.py` |
-| `/add` | 添加文件到上下文 | `/add config.json` |
-| `/image` | 添加图片进行多模态分析 | `/image photo.jpg` |
-| `/upload` | 上传文件 | `/upload document.pdf` |
-
-#### 执行与沙盒类
-
-| 命令 | 作用 | 示例 |
-|------|------|------|
-| `/run` | 执行代码或命令 | `/run` |
-| `/sandbox` | 进入/退出沙盒模式 | `/sandbox on` |
-| `/shell` | 执行 shell 命令 | `/shell ls -la` |
-
-#### 历史与保存类
-
-| 命令 | 作用 | 示例 |
-|------|------|------|
-| `/history` | 查看对话历史 | `/history` |
-| `/save` | 保存当前会话 | `/save session.json` |
-| `/load` | 加载之前的会话 | `/load session.json` |
-| `/export` | 导出对话为 Markdown | `/export chat.md` |
+| `/directory` | 管理工作目录 | `/directory add src/` |
 
 #### 认证类
 
 | 命令 | 作用 | 示例 |
 |------|------|------|
-| `/auth` | 查看认证状态 | `/auth` |
-| `/login` | 登录 Google 账号 | `/login` |
-| `/logout` | 退出登录 | `/logout` |
+| `/auth` | 认证管理 | `/auth login`、`/auth logout` |
+
+> ⚠️ **注意**：Gemini CLI 的登录/登出是 `/auth login` 和 `/auth logout`，不是独立的 `/login`、`/logout` 命令。
+
+#### 扩展与工具类
+
+| 命令 | 作用 | 示例 |
+|------|------|------|
+| `/extensions` | 管理扩展 | `/extensions list`、`/extensions install` |
+| `/mcp` | MCP 服务器管理 | `/mcp list`、`/mcp enable` |
+| `/tools` | 列出可用工具 | `/tools` |
+| `/agents` | 管理代理 | `/agents list`、`/agents enable` |
+| `/skills` | 管理 skills | `/skills list`、`/skills enable` |
+| `/hooks` | 管理 hooks | `/hooks panel`、`/hooks enable` |
+
+#### 项目与记忆类
+
+| 命令 | 作用 | 示例 |
+|------|------|------|
+| `/init` | 分析项目并创建 GEMINI.md | `/init` |
+| `/memory` | 记忆管理 | `/memory show`、`/memory add` |
+
+#### 对话管理类
+
+| 命令 | 作用 | 示例 |
+|------|------|------|
+| `/chat` | 对话管理 | `/chat list`、`/chat save`、`/chat resume` |
+| `/stats` | 会话统计 | `/stats session`、`/stats model` |
+
+#### 其他
+
+| 命令 | 作用 | 示例 |
+|------|------|------|
+| `/about` | 显示版本信息 | `/about` |
+| `/bug` | 提交 bug 报告 | `/bug` |
+| `/docs` | 打开完整文档 | `/docs` |
+| `/ide` | IDE 集成管理 | `/ide install`、`/ide status` |
+| `/setup-github` | 设置 GitHub Actions | `/setup-github` |
+| `/terminal-setup` | 配置终端键绑定 | `/terminal-setup` |
+| `/policies` | 查看活跃策略 | `/policies list` |
+| `/profile` | 切换调试 profile | `/profile` |
+| `/corgi` | 切换 corgi 模式 🐕 | `/corgi` |
+
+> ⚠️ **注意**：Gemini CLI 没有 `/sandbox`、`/image`、`/upload`、`/export`、`/read`、`/run`、`/shell`、`/save`、`/load` 等命令。压缩上下文的命令是 `/compress`（不是 `/compact`）。
 
 ---
 
@@ -1408,33 +1472,45 @@ opencode -f main.go "优化这个函数"
 opencode -p "生成 README" > README.md
 ```
 
-### 5. 内置斜杠命令
+### 5. 内置命令与操作方式
 
-OpenCode 的斜杠命令完整列表及详细说明：
+> ⚠️ **重要**：OpenCode 与其他 CLI 工具不同，它使用 **TUI（终端用户界面）+ 快捷键** 作为主要操作方式，而非斜杠命令体系。以下基于 OpenCode v1.1.23 [GitHub 源码](https://github.com/opencode-ai/opencode) 验证。
 
-| 命令 | 作用 | 详细说明 | 示例 |
-|------|------|---------|------|
-| `/help` | 查看帮助 | 显示所有可用命令及其用法 | `/help` |
-| `/clear` | 清除上下文 | 清除当前会话的所有对话历史，重新开始 | `/clear` |
-| `/quit` | 退出程序 | 退出 OpenCode CLI | `/quit` |
-| `/compact` | 压缩上下文 | 智能压缩对话历史，保留关键信息，节省 token | `/compact` |
-| `/model` | 切换模型 | 在当前会话中切换到不同的 AI 模型 | `/model gpt-4o` |
-| `/provider` | 切换提供商 | 切换 API 提供商（anthropic/openai/google 等） | `/provider openai` |
-| `/config` | 查看配置 | 显示当前的配置信息，包括模型、API Key 状态等 | `/config` |
-| `/add` | 添加文件 | 将指定文件添加到上下文，AI 可以读取和修改 | `/add src/main.go` |
-| `/drop` | 移除文件 | 从上下文中移除指定文件，减少 token 消耗 | `/drop src/main.go` |
-| `/files` | 列出文件 | 显示当前上下文中已添加的所有文件列表 | `/files` |
-| `/ls` | 列出目录 | 列出指定目录下的文件和子目录 | `/ls src/` |
-| `/diff` | 显示差异 | 显示 AI 修改前后的代码差异（类似 git diff） | `/diff` |
-| `/undo` | 撤销更改 | 撤销 AI 最近一次对文件的修改 | `/undo` |
-| `/commit` | 提交更改 | 将当前更改提交到 Git 仓库 | `/commit "feat: add"` |
-| `/copy` | 复制内容 | 将 AI 的最后一次回复复制到剪贴板 | `/copy` |
-| `/paste` | 粘贴内容 | 将剪贴板内容粘贴到当前输入 | `/paste` |
-| `/history` | 查看历史 | 显示当前会话的对话历史 | `/history` |
-| `/save` | 保存会话 | 将当前会话保存到文件 | `/save session.json` |
-| `/load` | 加载会话 | 从文件加载之前保存的会话 | `/load session.json` |
-| `/tokens` | Token 统计 | 显示当前会话的 token 使用情况 | `/tokens` |
-| `/cost` | 费用统计 | 显示当前会话的 API 调用费用 | `/cost` |
+#### 内置命令（仅 2 个）
+
+OpenCode 只有 2 个内置命令，通过命令弹窗（`Ctrl+K`）选择执行：
+
+| 命令 | 作用 | 详细说明 |
+|------|------|---------|
+| `init` | 初始化项目 | 分析代码库并创建/更新 OpenCode.md 记忆文件 |
+| `compact` | 压缩会话 | 总结当前会话并创建新会话 |
+
+#### 主要操作方式：快捷键
+
+OpenCode 的大部分操作通过快捷键完成：
+
+| 快捷键 | 作用 |
+|--------|------|
+| `Ctrl+K` | 打开命令弹窗 |
+| `Ctrl+E` | 用外部编辑器编写消息 |
+| `Ctrl+R` | 删除附件模式 |
+| `Enter` / `Ctrl+S` | 发送消息 |
+| `Esc` | 取消/退出 |
+
+#### 自定义命令
+
+OpenCode 支持通过 `.md` 文件创建自定义命令：
+
+```bash
+# 用户级自定义命令
+~/.config/opencode/commands/
+~/.opencode/commands/
+
+# 项目级自定义命令
+.opencode/commands/
+```
+
+> ⚠️ **注意**：网上流传的 OpenCode `/help`、`/clear`、`/quit`、`/model`、`/provider`、`/tokens`、`/cost`、`/add`、`/drop`、`/files`、`/ls`、`/diff`、`/undo`、`/commit`、`/copy`、`/paste`、`/history`、`/save`、`/load` 等斜杠命令**均不存在**。OpenCode 使用 TUI 界面和快捷键，不是斜杠命令体系。
 
 ### 6. LSP 集成
 
@@ -2650,12 +2726,12 @@ pip install aider-chat
 
 | 操作 | Claude | Codex | Gemini | Kiro | Copilot | OpenCode | Aider |
 |------|--------|-------|--------|------|---------|----------|-------|
-| 帮助 | `/help` | `/help` | `/help` | `/help` | `/help` | `/help` | `/help` |
-| 清除 | `/clear` | `/clear` | `/clear` | `/clear` | `/clear` | `/clear` | `/clear` |
-| 切换模型 | `/model` | `/model` | `/model` | `/model` | `/model` | `/model` | `/model` |
-| 添加文件 | `/add` | `/add` | `/add` | - | `/add-dir` | `/add` | `/add` |
-| 撤销 | - | `/undo` | - | - | - | `/undo` | `/undo` |
-| 退出 | `/quit` | `/exit` | `/quit` | `/quit` | `/exit` | `/quit` | `/quit` |
+| 帮助 | `/help` | 输入 `/` | `/help` | `/help` | `/help` | `Ctrl+K` | `/help` |
+| 清除 | `/clear` | `/compact` | `/clear` | `/clear` | `/clear` | - | `/clear` |
+| 切换模型 | `/model` | `/model` | `/model` | `/model` | `/model` | - | `/model` |
+| 添加文件 | `/add-dir` | `/mention` | `/directory add` | - | `/add-dir` | - | `/add` |
+| 撤销 | `/rewind` | - | `/rewind` | - | - | - | `/undo` |
+| 退出 | `/exit` | `/exit` | `/quit` | `/quit` | `/exit` | `Esc` | `/quit` |
 
 ### 关键差异一览
 
