@@ -16,7 +16,16 @@
 先写规范，再写代码。规范即文档，规范即测试用例。
 ```
 
-### 核心理念
+### 核心哲学
+
+```
+→ fluid not rigid        流动而非僵化（不卡阶段，随时按需推进）
+→ iterative not waterfall 迭代而非瀑布（边构建边学习，边推进边优化）
+→ easy not complex       简单而非复杂（轻量启动，最少仪式感）
+→ brownfield-first       存量优先（为现有代码库设计，不只是新项目）
+```
+
+### 核心思想
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -96,24 +105,193 @@ openspec/
 
 ![OpenSpec 目录结构示例](contents.png)
 
-## 三阶段工作流
+## OPSX 工作流：Actions, Not Phases
+
+> 传统工作流把你锁在"阶段"中——先规划、再实现、然后结束。OPSX 采用 **流动动作（fluid actions）** 模式：命令是你**可以做的事**，而不是你**被困住的阶段**。
 
 ```
-┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│  Stage 1         │     │  Stage 2         │     │  Stage 3         │
-│  创建变更提案     │ ──► │  实现变更         │ ──► │  归档变更         │
-│                  │     │                  │     │                  │
-│  proposal.md     │     │  按 tasks.md     │     │  openspec        │
-│  tasks.md        │     │  顺序实现        │     │  archive         │
-│  delta specs     │     │                  │     │                  │
-└──────────────────┘     └──────────────────┘     └──────────────────┘
+传统（阶段锁定）：
+
+  PLANNING ────────► IMPLEMENTING ────────► DONE
+      │                    │
+      │   "不能回头"        │
+      └────────────────────┘
+
+OPSX（流动动作）：
+
+  /opsx:new ──► /opsx:ff ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+                  │                              │
+               或逐步：                       可选但推荐
+            /opsx:continue
 ```
+
+### Artifact 依赖图
+
+Artifact（制品）之间形成依赖关系，**依赖是启用条件，不是必须的下一步**：
+
+```
+                    proposal
+                   （根节点）
+                       │
+         ┌─────────────┴─────────────┐
+         │                           │
+         ▼                           ▼
+      specs                       design
+   （需要：proposal）          （需要：proposal）
+         │                           │
+         └─────────────┬─────────────┘
+                       │
+                       ▼
+                    tasks
+              （需要：specs + design）
+```
+
+> 你可以跳过 design（如果不需要），也可以先创建 specs 或 design——两者都只依赖 proposal。
 
 ![变更流程示例](changes.png)
 
 ---
 
-## Stage 1: 创建变更提案
+## 三种工作流模式
+
+### 模式一：Quick Feature（快速功能）
+
+**适用场景**：你清楚要做什么，直接执行。
+
+```text
+You: /opsx:new add-logout-button
+
+AI:  Created openspec/changes/add-logout-button/
+     Ready to create: proposal
+
+You: /opsx:ff
+
+AI:  Creating all planning artifacts...
+     ✓ proposal.md
+     ✓ specs/
+     ✓ design.md
+     ✓ tasks.md
+     Ready for implementation!
+
+You: /opsx:apply
+
+AI:  Working through tasks...
+     ✓ Added logout button to header
+     ✓ Implemented session clearing
+     ✓ Added confirmation dialog
+     All tasks complete!
+
+You: /opsx:verify
+
+AI:  COMPLETENESS ✓ | CORRECTNESS ✓ | COHERENCE ✓
+     Ready to archive!
+
+You: /opsx:archive
+
+AI:  ✓ Merged specs
+     ✓ Archived change
+```
+
+### 模式二：Exploratory（探索式）
+
+**适用场景**：需求不明确，需要先调研。
+
+```text
+You: /opsx:explore
+
+AI:  What would you like to explore?
+
+You: 我想优化页面加载性能，但不确定瓶颈在哪
+
+AI:  Let me investigate...
+     [分析打包体积、查找慢查询、检查组件渲染]
+
+     找到三个主要瓶颈：
+     1. 大型未优化图片
+     2. ProductList 中的同步数据获取
+     3. Context 变化导致的重渲染
+
+     你想先解决哪个？
+
+You: 先处理数据获取问题
+
+You: /opsx:new optimize-product-list-fetching
+
+AI:  Created change. Ready to create: proposal
+
+You: /opsx:continue    # 逐步创建，每步可审查
+
+AI:  Creating proposal based on our exploration...
+```
+
+### 模式三：Parallel Changes（并行变更）
+
+**适用场景**：同时处理多个变更，可中途切换。
+
+```text
+You: 我正在做 add-dark-mode，但需要先修一个紧急 bug
+
+You: /opsx:new fix-login-redirect
+AI:  Created openspec/changes/fix-login-redirect/
+
+You: /opsx:ff
+You: /opsx:apply
+You: /opsx:archive
+AI:  ✓ Archived fix-login-redirect
+
+You: 回到暗色模式
+
+You: /opsx:apply add-dark-mode
+AI:  Resuming add-dark-mode...
+     Picking up at task 2.3: Update Header...
+```
+
+> 💡 多个完成的变更可以用 `/opsx:bulk-archive` 一次性批量归档，OpenSpec 会自动检测并解决 spec 冲突。
+
+---
+
+## `/opsx:ff` vs `/opsx:continue` 选择指南
+
+| 场景 | 推荐 |
+|------|------|
+| 需求明确，准备开始 | `/opsx:ff`（一次生成所有规划文档） |
+| 需求不明确，想逐步审查 | `/opsx:continue`（逐个创建制品） |
+| 想在写 specs 之前先完善 proposal | `/opsx:continue` |
+| 时间紧迫，需要快速推进 | `/opsx:ff` |
+| 复杂变更，需要精细控制 | `/opsx:continue` |
+
+**经验法则**：如果你能一次描述清楚整个范围，用 `/opsx:ff`；如果你还在摸索，用 `/opsx:continue`。
+
+---
+
+## 何时更新现有变更 vs 创建新变更
+
+```
+                     ┌─────────────────────────────────────┐
+                     │     这还是同一项工作吗？              │
+                     └──────────────┬──────────────────────┘
+                                    │
+                 ┌──────────────────┼──────────────────┐
+                 │                  │                  │
+                 ▼                  ▼                  ▼
+          意图相同？         > 50% 重叠？       原变更能独立
+          问题相同？         范围相同？          "完成"吗？
+                 │                  │                  │
+       ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
+      YES               NO YES           NO  NO              YES
+       │                 │  │             │   │               │
+       ▼                 ▼  ▼             ▼   ▼               ▼
+    更新现有           新建  更新现有      新建  更新现有        新建
+```
+
+**举例**：「添加暗色模式」
+- "还需要支持自定义主题" → **新建**（范围爆炸了）
+- "系统偏好检测比预期复杂" → **更新**（意图不变）
+- "先上线开关，偏好设置以后再做" → **更新后归档，再新建**
+
+---
+
+## 创建变更提案
 
 ### 什么时候需要创建提案？
 
@@ -133,7 +311,23 @@ openspec/
 └── 为现有行为补充测试
 ```
 
-### 创建流程演示
+### 使用 OPSX 命令创建（推荐）
+
+```text
+# 方式一：快速创建 + 一次性生成所有制品
+/opsx:new add-user-management
+/opsx:ff
+
+# 方式二：逐步创建，每步可审查
+/opsx:new add-user-management
+/opsx:continue    # 创建 proposal
+# （审查 proposal，满意后继续）
+/opsx:continue    # 创建 specs
+/opsx:continue    # 创建 design
+/opsx:continue    # 创建 tasks
+```
+
+### 手动创建（也可以）
 
 ```bash
 # Step 1: 了解当前状态
@@ -219,29 +413,36 @@ openspec validate $CHANGE --strict
 
 ---
 
-## Stage 2: 实现变更
+## 实现变更：`/opsx:apply`
 
-### 实现流程
+### 使用 OPSX 命令实现（推荐）
 
+```text
+You: /opsx:apply
+
+AI:  Implementing add-user-management...
+
+     Reading tasks.md:
+     - [ ] 1.1 创建前端项目结构
+     - [ ] 1.2 创建后端项目结构
+     - [ ] 1.3 配置代码格式化工具
+
+     Working on 1.1: 创建前端项目结构...
+     [Creates frontend directory structure]
+
+     ✓ 1.1 Complete
+
+     Working on 1.2: 创建后端项目结构...
+     [Creates backend directory structure]
+
+     ✓ 1.2 Complete
+     ...
+     All tasks complete!
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     实现阶段工作流                            │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  1. 阅读 proposal.md  ────────►  理解要构建什么               │
-│                                                             │
-│  2. 阅读 design.md    ────────►  了解技术决策（如果有）        │
-│                                                             │
-│  3. 阅读 tasks.md     ────────►  获取实现清单                 │
-│                                                             │
-│  4. 按顺序完成任务    ────────►  逐个实现                     │
-│                                                             │
-│  5. 更新清单          ────────►  将 [ ] 改为 [x]             │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
 
-### 重要原则
+> 💡 `/opsx:apply` 支持中断后恢复——如果被打断，再次运行会从上次未完成的任务继续。
+
+### 实现阶段要点
 
 ```
 ⚠️ 未经批准不要开始实现
@@ -251,14 +452,81 @@ openspec validate $CHANGE --strict
    任务之间可能有依赖关系
 
 ⚠️ 完成一个任务立即标记
-   保持进度可见
+   保持进度可见（将 [ ] 改为 [x]）
 ```
 
 ---
 
-## Stage 3: 归档变更
+## 验证与归档：`/opsx:verify` → `/opsx:archive`
 
-### 归档流程
+### 验证实现：`/opsx:verify`
+
+归档前建议先验证，检查实现是否与规范一致：
+
+```text
+You: /opsx:verify
+
+AI:  Verifying add-user-management...
+
+     COMPLETENESS（完整性）
+     ✓ All 8 tasks in tasks.md are checked
+     ✓ All requirements in specs have corresponding code
+     ⚠ Scenario "用户删除后数据清理" not tested
+
+     CORRECTNESS（正确性）
+     ✓ Implementation matches spec intent
+     ✓ Edge cases from scenarios are handled
+     ✓ Error states match spec definitions
+
+     COHERENCE（一致性）
+     ✓ Design decisions reflected in code structure
+     ✓ Naming conventions consistent with design.md
+     ⚠ Design mentions "事件驱动" but implementation uses polling
+
+     SUMMARY
+     ─────────────────────────────
+     Critical issues: 0
+     Warnings: 2
+     Ready to archive: Yes (with warnings)
+
+     Recommendations:
+     1. 补充用户删除场景的测试
+     2. 重构为事件驱动实现，或更新 design.md
+```
+
+| 验证维度 | 检查内容 |
+|---------|---------|
+| **Completeness** | 所有任务完成、所有需求已实现、场景已覆盖 |
+| **Correctness** | 实现符合 spec 意图、边界情况已处理 |
+| **Coherence** | 设计决策体现在代码中、模式一致 |
+
+> verify 不会阻止归档，但会暴露你可能想先解决的问题。
+
+### 归档变更：`/opsx:archive`
+
+```text
+You: /opsx:archive
+
+AI:  Archiving add-user-management...
+
+     Artifact status:
+     ✓ proposal.md exists
+     ✓ specs/ exists
+     ✓ design.md exists
+     ✓ tasks.md exists (8/8 tasks complete)
+
+     Delta specs: Not yet synced to main
+     → Would you like to sync now?
+
+You: Yes
+
+AI:  ✓ Synced specs to openspec/specs/user-auth/spec.md
+     ✓ Moved to openspec/changes/archive/2025-02-04-add-user-management/
+
+     Change archived successfully.
+```
+
+### 也可以用 CLI 命令归档
 
 ```bash
 # 标准归档（会更新 specs/ 目录）
@@ -288,7 +556,46 @@ openspec validate --strict
 
 ---
 
-## CLI 命令速查
+## OPSX 斜杠命令速查
+
+> 在 AI 助手的聊天界面中使用（Claude Code、Cursor、Windsurf 等）。
+
+| 命令 | 作用 | 适用场景 |
+|------|------|---------|
+| `/opsx:explore` | 探索想法，调研问题 | 需求不明确、需要调研 |
+| `/opsx:new` | 创建新变更 | 开始任何新工作 |
+| `/opsx:continue` | 创建下一个制品 | 逐步创建，每步可审查 |
+| `/opsx:ff` | 快进：一次创建所有规划制品 | 需求明确，快速推进 |
+| `/opsx:apply` | 实现任务 | 准备写代码了 |
+| `/opsx:verify` | 验证实现与制品匹配 | 归档前检查质量 |
+| `/opsx:sync` | 合并增量 specs 到主 specs | 长期变更需要提前同步 |
+| `/opsx:archive` | 归档已完成的变更 | 工作全部完成 |
+| `/opsx:bulk-archive` | 批量归档多个变更 | 并行工作流，批量完成 |
+| `/opsx:onboard` | 交互式新手教程 | 第一次使用 OpenSpec |
+
+#### 不同 AI 工具的命令语法
+
+| 工具 | 语法示例 |
+|------|---------|
+| Claude Code | `/opsx:new`, `/opsx:apply` |
+| Cursor | `/opsx-new`, `/opsx-apply` |
+| Windsurf | `/opsx-new`, `/opsx-apply` |
+| Copilot (IDE) | `/opsx-new`, `/opsx-apply` |
+| Trae | `/openspec-new-change`, `/openspec-apply-change` |
+
+> 功能完全相同，只是语法格式不同。
+
+#### Legacy 命令（旧版）
+
+旧版命令仍可使用，但推荐 OPSX 命令：
+
+| 旧命令 | 作用 |
+|--------|------|
+| `/openspec:proposal` | 一次性创建所有制品（proposal, specs, design, tasks） |
+| `/openspec:apply` | 实现变更 |
+| `/openspec:archive` | 归档变更 |
+
+## CLI 终端命令速查
 
 ```bash
 # 📋 查看状态
@@ -306,6 +613,12 @@ openspec archive <change-id> --skip-specs --yes  # 跳过 specs 更新
 
 # 🔍 调试
 openspec show [change] --json --deltas-only  # 查看增量解析结果
+
+# 🔧 管理
+openspec init                    # 初始化项目
+openspec update                  # 刷新 AI 指令（升级后执行）
+openspec schemas                 # 列出可用 schema
+openspec schema init <name>      # 创建自定义 schema
 ```
 
 ---
@@ -322,15 +635,20 @@ AGENTS.md 告诉 AI：
 4. 工作流程是什么
 ```
 
-### AI 触发词
+### AI 触发方式
 
 ```
-当你对 AI 说以下内容时，AI 会进入 OpenSpec 工作流：
+使用 OPSX 斜杠命令直接触发（推荐）：
+
+/opsx:new add-dark-mode          # 创建新变更
+/opsx:explore                     # 探索问题
+/opsx:onboard                    # 新手引导教程
+
+也可以用自然语言触发：
 
 "帮我创建一个变更提案"
 "帮我规划一个变更"
 "我想创建一个 spec"
-"Help me create a proposal"
 ```
 
 ### AI 工作流程
@@ -466,9 +784,13 @@ changes/add-feature/specs/auth/spec.md   # 必须在 specs/ 子目录
 
 ```bash
 # ❌ 直接归档
-openspec archive my-change --yes
+/opsx:archive
 
-# ✅ 先验证再归档
+# ✅ 先验证再归档（推荐流程）
+/opsx:verify      # 检查 Completeness / Correctness / Coherence
+/opsx:archive     # 确认无误后归档
+
+# 也可以用 CLI
 openspec validate my-change --strict
 openspec archive my-change --yes
 ```
@@ -549,15 +871,27 @@ changes/add-2fa-notify/
 │                    OpenSpec 核心要点                         │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  理念：先写规范，再写代码                                     │
+│  哲学：fluid / iterative / easy / brownfield-first          │
 │                                                             │
 │  结构：specs/ = 已构建  |  changes/ = 计划构建               │
 │                                                             │
-│  流程：创建提案 → 审批 → 实现 → 归档                          │
+│  命令：/opsx:new → ff/continue → apply → verify → archive  │
 │                                                             │
 │  协作：AI 通过 AGENTS.md + project.md 理解项目               │
 │                                                             │
 │  避坑：Scenario 用 ####  |  MODIFIED 写完整内容              │
+│                                                             │
+│  完整流程图：                                                │
+│                                                             │
+│  ┌────────┐   ┌──────────┐   ┌─────────┐                   │
+│  │  NEW   │──►│ FF/CONT  │──►│  APPLY  │                   │
+│  │  创建   │   │ 生成制品  │   │  实现   │                   │
+│  └────────┘   └──────────┘   └────┬────┘                   │
+│                                   │                         │
+│                              ┌────▼────┐   ┌─────────┐     │
+│                              │ VERIFY  │──►│ ARCHIVE │     │
+│                              │  验证    │   │  归档   │     │
+│                              └─────────┘   └─────────┘     │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -565,4 +899,5 @@ changes/add-2fa-notify/
 ---
 
 *基于 PackageIMSDK 项目实战经验整理*
-*最后更新：2025-02*
+*参考 [OpenSpec 官方文档](https://github.com/Fission-AI/OpenSpec)*
+*最后更新：2026-02*
