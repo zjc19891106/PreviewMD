@@ -625,6 +625,113 @@ openspec schema init <name>      # 创建自定义 schema
 
 ## 与 AI 助手协作
 
+### 安装与初始化
+
+```bash
+# 1. 全局安装 OpenSpec（需要 Node.js >= 20.19.0）
+npm install -g @fission-ai/openspec@latest
+
+# 2. 进入项目目录，初始化
+cd your-project
+openspec init          # 交互式选择你使用的 AI 工具
+
+# 非交互式（CI/CD 或脚本化）
+openspec init --tools claude          # 只配置 Claude Code
+openspec init --tools codex           # 只配置 Codex CLI
+openspec init --tools claude,codex    # 同时配置两者
+openspec init --tools all             # 配置所有支持的工具（20+）
+```
+
+### Claude Code 集成
+
+```bash
+openspec init --tools claude
+```
+
+**安装的文件**：
+
+```
+your-project/
+├── .claude/
+│   ├── skills/                    # 10 个 skill 文件（驱动 OPSX 命令）
+│   │   ├── openspec-explore.md
+│   │   ├── openspec-new-change.md
+│   │   ├── openspec-continue-change.md
+│   │   ├── openspec-ff-change.md
+│   │   ├── openspec-apply-change.md
+│   │   ├── openspec-verify-change.md
+│   │   ├── openspec-sync-specs.md
+│   │   ├── openspec-archive-change.md
+│   │   ├── openspec-bulk-archive-change.md
+│   │   └── openspec-onboard.md
+│   └── commands/opsx/             # 斜杠命令绑定
+│       ├── new.md
+│       ├── ff.md
+│       ├── apply.md
+│       └── ...
+└── openspec/                      # OpenSpec 核心目录
+```
+
+**使用**：直接在 Claude Code 中输入斜杠命令，开箱即用。
+
+```text
+> /opsx:new add-dark-mode
+> /opsx:ff
+> /opsx:apply
+> /opsx:verify
+> /opsx:archive
+```
+
+### Codex CLI 集成
+
+```bash
+openspec init --tools codex
+```
+
+**安装的文件**：
+
+```
+your-project/
+├── .codex/
+│   └── skills/                    # 10 个 skill 文件（同上）
+└── openspec/
+
+# ⚠️ 注意：commands 安装在全局目录，不在项目内
+~/.codex/prompts/                  # 斜杠命令绑定（全局）
+```
+
+> ⚠️ **Codex 特殊之处**：命令文件装在全局 `~/.codex/prompts/`，一次安装所有项目都能用，切换项目不用重装。
+
+**使用**：和 Claude Code 语法相同。
+
+```text
+> /opsx:new add-dark-mode
+> /opsx:ff
+> /opsx:apply
+> /opsx:verify
+> /opsx:archive
+```
+
+### Claude Code vs Codex CLI 集成对比
+
+| 维度 | Claude Code | Codex CLI |
+|------|------------|-----------|
+| **Skills 位置** | `.claude/skills/`（项目级） | `.codex/skills/`（项目级） |
+| **Commands 位置** | `.claude/commands/opsx/`（项目级） | `~/.codex/prompts/`（**全局**） |
+| **命令语法** | `/opsx:new` | `/opsx:new` |
+| **升级后刷新** | 项目内 `openspec update` | 项目内 `openspec update` |
+| **特殊注意** | 无，开箱即用 | 命令文件全局共享 |
+
+### 其他工具的语法差异
+
+| 工具 | 命令语法 | 说明 |
+|------|---------|------|
+| Claude Code / Codex | `/opsx:new` | 用冒号分隔 |
+| Cursor / Windsurf | `/opsx-new` | 用连字符分隔 |
+| Trae | `/openspec-new-change` | 用全名 |
+
+> 功能完全相同，只是语法格式适配不同工具的命令系统。
+
 ### AGENTS.md 的作用
 
 ```
