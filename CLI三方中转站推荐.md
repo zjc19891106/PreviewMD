@@ -71,6 +71,8 @@ npm install -g @anthropic-ai/claude-code
 - 倍率约为官方 **0.2x**，非常划算
 - 建议：新手可以先充 10-20 块试试水
 
+## https://hongmacc.com/signup?ref=HONGMACC-377DA889
+
 ### 其他服务
 
 - Gemini CLI API
